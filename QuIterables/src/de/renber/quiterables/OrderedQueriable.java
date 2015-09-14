@@ -37,4 +37,8 @@ public interface OrderedQueriable<T> extends Queriable<T> {
 	 */
 	public OrderedQueriable<T> thenBy(ItemFunc<T, Comparable> func);
 	
+	/**
+	 * Define a secondary ordering criterion	
+	 */
+	public OrderedQueriable<T> thenByDescending(ItemFunc<T, Comparable> func);
 }

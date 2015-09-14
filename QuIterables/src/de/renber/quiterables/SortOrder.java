@@ -23,28 +23,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *******************************************************************************/
-package de.renber.quiterables.grouping;
-
-import java.util.ArrayList;
-import java.util.List;
+package de.renber.quiterables;
 
 /**
- * A list which has been grouped and therefore contains groups
- * of a given element type
+ * Values two specifiy a sort order
+ * @author René Bergelt
+ *
  */
-public interface GroupedList<T> extends List<Group<T>> {
-	
-	/**
-	 * Return the group with the given group key or null if no such group exists
-	 */
-	public Group<T> get(GroupKey key);
-	
-	/**
-	 * Return the group with the group key composed of the given elements or null if no such group exists
-	 * In order to use this function with a single key element of type int, call it like get(new Integer(value))
-	 * 
-	 * @param key
-	 * @return
-	 */
-	public Group<T> get(Object...keyElements);	
+public enum SortOrder {
+	Ascending,
+	Descending
 }

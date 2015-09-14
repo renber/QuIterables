@@ -58,7 +58,7 @@ class GroupedQueriableImpl<T> extends QueriableImpl<Group<T>> implements Grouped
 	}
 	
 	public GroupedList<T> toList() {
-		GroupedList<T> gl = new GroupedList<T>();
+		GroupedList<T> gl = new GroupedListImpl<T>();
 		gl.addAll(getGroupedList());
 		return gl;
 	}

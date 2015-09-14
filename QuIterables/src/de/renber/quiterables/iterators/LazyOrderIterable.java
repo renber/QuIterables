@@ -33,6 +33,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import de.renber.quiterables.ItemFunc;
+import de.renber.quiterables.SortOrder;
 
 /**
  * AN Iterable which sorts its elements before returning an iterator
@@ -45,23 +46,23 @@ import de.renber.quiterables.ItemFunc;
 public class LazyOrderIterable<T> implements Iterable<T> {
 
 	Iterable<T> wrapped;		
-	List<ItemFunc<T, Comparable>> orderFuncs;
+	List<OrderFunc<T>> orderFuncs;
 
 	List<T> sortedList;
 
-	public LazyOrderIterable(Iterable<T> _wrapped, ItemFunc<T, Comparable> _orderFunc) {
+	public LazyOrderIterable(Iterable<T> _wrapped, ItemFunc<T, Comparable> _orderFunc, SortOrder sortOrder) {
 		wrapped = _wrapped;
 		
-		orderFuncs = new ArrayList<ItemFunc<T, Comparable>>();
-		orderFuncs.add(_orderFunc);
+		orderFuncs = new ArrayList<OrderFunc<T>>();
+		orderFuncs.add(new OrderFunc<T>(_orderFunc, sortOrder));
 	}	
 	
 	/**
 	 * Add a secondary ordering function which is used to compare elements
 	 * for which all previous ordering functions return "equal"	 
 	 */
-	public void addSecondaryOrderFunction(ItemFunc<T, Comparable> func) {
-		orderFuncs.add(func);
+	public void addSecondaryOrderFunction(ItemFunc<T, Comparable> func, SortOrder sortOrder) {
+		orderFuncs.add(new OrderFunc<T>(func, sortOrder));
 	}
 
 	@Override
@@ -80,13 +81,13 @@ public class LazyOrderIterable<T> implements Iterable<T> {
 					
 					int result = 0;
 					
-					for(ItemFunc<T, Comparable> f: orderFuncs) {
-						Comparable c1 = f.exec(item1);
-						Comparable c2 = f.exec(item2);
+					for(OrderFunc f: orderFuncs) {
+						Comparable c1 = (Comparable)f.func.exec(item1);
+						Comparable c2 = (Comparable)f.func.exec(item2);
 						
-						result = c1.compareTo(c2);
+						result = c1.compareTo(c2);												
 						if (result != 0)
-							return result;
+							return f.sortOrder == SortOrder.Ascending ? result : -result;
 					}
 					
 					return result;
@@ -97,4 +98,14 @@ public class LazyOrderIterable<T> implements Iterable<T> {
 		return sortedList.iterator();
 	}
 
+	class OrderFunc<T> {
+		public ItemFunc<T, Comparable> func;
+		public SortOrder sortOrder; 
+		
+		public OrderFunc(ItemFunc<T, Comparable> _func, SortOrder _sortOrder) {
+			func = _func;
+			sortOrder = _sortOrder;
+		}
+	}
+	
 }

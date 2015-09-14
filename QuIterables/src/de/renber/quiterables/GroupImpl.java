@@ -23,28 +23,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *******************************************************************************/
-package de.renber.quiterables.grouping;
+package de.renber.quiterables;
 
 import java.util.ArrayList;
-import java.util.List;
+
+import de.renber.quiterables.grouping.Group;
+import de.renber.quiterables.grouping.GroupKey;
 
 /**
- * A list which has been grouped and therefore contains groups
- * of a given element type
+ * Actual implementation of the Group interfaces used by the QuIterables library
+ * @author René Bergelt
+ *
  */
-public interface GroupedList<T> extends List<Group<T>> {
-	
+class GroupImpl<T> extends ArrayList<T> implements Group<T> {
+
+	private GroupKey key;	
+
+	public GroupImpl(GroupKey _key) {
+		key = _key;
+	}
+
 	/**
-	 * Return the group with the given group key or null if no such group exists
-	 */
-	public Group<T> get(GroupKey key);
-	
-	/**
-	 * Return the group with the group key composed of the given elements or null if no such group exists
-	 * In order to use this function with a single key element of type int, call it like get(new Integer(value))
+	 * returns this list's group key
 	 * 
-	 * @param key
 	 * @return
 	 */
-	public Group<T> get(Object...keyElements);	
+	@Override
+	public GroupKey getKey() {
+		return key;
+	}	
 }

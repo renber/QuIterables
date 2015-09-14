@@ -197,9 +197,20 @@ public interface Queriable<T> extends Iterable<T> {
 	
 	/**
 	 * Order the elements of this enumeration according	the values
-	 * return by the order function
+	 * returned by the order function
 	 */
 	public OrderedQueriable<T> orderBy(ItemFunc<T, Comparable> func);
+	
+	/**
+	 * Order the elements of this enumeration according	the values
+	 * returned by the order function in descending order
+	 */
+	public OrderedQueriable<T> orderByDescending(ItemFunc<T, Comparable> func);
+	
+	/**
+	 * Reverse the order of elements of this enumeration	 
+	 */
+	public Queriable<T> reverse();
 	
 	/**
 	 * Return a list which contains all elements of this enumeration

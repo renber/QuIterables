@@ -28,6 +28,7 @@ package de.renber.quiterables;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -306,7 +307,20 @@ class QueriableImpl<T> implements Queriable<T> {
 
 	@Override
 	public OrderedQueriable<T> orderBy(ItemFunc<T, Comparable> func) {
-		return new OrderedQueriableImpl<T>(containedIter, func);
+		return new OrderedQueriableImpl<T>(containedIter, func, SortOrder.Ascending);
+	}
+	
+	@Override
+	public OrderedQueriable<T> orderByDescending(ItemFunc<T, Comparable> func) {
+		return new OrderedQueriableImpl<T>(containedIter, func, SortOrder.Descending);			
+	}
+	
+	@Override
+	public Queriable<T> reverse() {
+		List<T> lst = toList();
+		// TODO: maybe better use ListIterator and its hasPrevious() and previous() methods
+		Collections.reverse(lst);
+		return new QueriableImpl<T>(lst);
 	}
 
 	@Override
@@ -320,7 +334,7 @@ class QueriableImpl<T> implements Queriable<T> {
 			Group<T> els = groups.get(gk);
 			if (els == null) {
 				// new group key
-				els = new Group<T>(gk);
+				els = new GroupImpl<T>(gk);
 				groups.put(gk, els);
 			}
 
@@ -329,7 +343,7 @@ class QueriableImpl<T> implements Queriable<T> {
 		}
 
 		// return the groups
-		GroupedList<T> gList = new GroupedList<T>();
+		GroupedList<T> gList = new GroupedListImpl<T>();
 		gList.addAll(groups.values());
 
 		return new GroupedQueriableImpl<T>(gList);

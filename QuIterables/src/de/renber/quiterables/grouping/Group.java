@@ -34,20 +34,10 @@ import java.util.List;
  * @author berre
  * 
  */
-public class Group<T> extends ArrayList<T> {
-
-	private GroupKey key;	
-
-	public Group(GroupKey _key) {
-		key = _key;
-	}
+public interface Group<T> extends List<T> {
 
 	/**
-	 * returns this list's group key
-	 * 
-	 * @return
+	 * returns this group's group key	 
 	 */
-	public GroupKey getKey() {
-		return key;
-	}	
+	public GroupKey getKey();
 }

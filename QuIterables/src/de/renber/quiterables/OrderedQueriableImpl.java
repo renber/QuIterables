@@ -37,13 +37,19 @@ class OrderedQueriableImpl<T> extends QueriableImpl<T> implements OrderedQueriab
 		return (LazyOrderIterable<T>)containedIter;
 	}
 	
-	protected OrderedQueriableImpl(Iterable<T> forIterable, ItemFunc<T, Comparable> func) {
-		super(new LazyOrderIterable<T>(forIterable, func));
+	protected OrderedQueriableImpl(Iterable<T> forIterable, ItemFunc<T, Comparable> func, SortOrder sortOrder) {
+		super(new LazyOrderIterable<T>(forIterable, func, sortOrder));
 	}
 	
 	@Override
 	public OrderedQueriable<T> thenBy(ItemFunc<T, Comparable> func) {
-		getOrderIterable().addSecondaryOrderFunction(func);
+		getOrderIterable().addSecondaryOrderFunction(func, SortOrder.Ascending);
+		return this;
+	}
+	
+	@Override
+	public OrderedQueriable<T> thenByDescending(ItemFunc<T, Comparable> func) {
+		getOrderIterable().addSecondaryOrderFunction(func, SortOrder.Descending);
 		return this;
 	}
 
