@@ -37,7 +37,18 @@ public class OrderingTests {
 		
 		for (int i = 0; i < sortedArray.length; i++)
 			if (testArray[i] != sortedArray[i])
-				fail("Arrays do not match.");		
+				fail("Arrays do not match.");			
+	}
+	
+	@Test
+	public void test_orderByDescending_int() {
+		int[] numbers = new int[] {34, 76, 3, 12, 55, 23, 105, 67, 12};		
+		int[] testArray = Query.array(numbers).orderByDescending(x -> x).toPrimitiveArray().intArray();
+		int[] sortedArray = new int[] {105, 76, 67, 55, 34, 23, 12, 12, 3};		
+		
+		for (int i = 0; i < sortedArray.length; i++)
+			if (testArray[i] != sortedArray[i])
+				fail("Arrays do not match.");			
 	}
 	
 	@Test 
@@ -56,6 +67,17 @@ public class OrderingTests {
 		
 		assertEquals(orderedList, resultList);
 	}	
+	
+	@Test
+	public void test_reverse() {
+		int[] numbers = new int[] {34, 76, 3, 12, 55, 23, 105, 67, 12};		
+		int[] testArray = Query.array(numbers).reverse().toPrimitiveArray().intArray();
+		int[] reversedArray = new int[] {12, 67, 105, 23, 55, 12, 3, 76, 34};		
+		
+		for (int i = 0; i < reversedArray.length; i++)
+			if (testArray[i] != reversedArray[i])
+				fail("Arrays do not match.");			
+	}
 	
 	class TestPerson {
 		public String firstName;
