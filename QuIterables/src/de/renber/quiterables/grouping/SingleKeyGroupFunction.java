@@ -1,5 +1,5 @@
 /*******************************************************************************
- * This file is part of the Java IterQuery Library
+ * This file is part of the Java QuIterables Library
  *
  * The MIT License (MIT)
  *
@@ -31,7 +31,6 @@ package de.renber.quiterables.grouping;
  * @author berre
  * 
  */
-@FunctionalInterface
 public interface SingleKeyGroupFunction<T> {
 
 	public Object getKeyElementFor(T element);

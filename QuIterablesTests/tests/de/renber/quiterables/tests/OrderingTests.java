@@ -2,12 +2,15 @@ package de.renber.quiterables.tests;
 
 import static org.junit.Assert.*;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
 
 import de.renber.quiterables.Query;
+import de.renber.quiterables.iterators.ListReverseIterable;
 
 public class OrderingTests {
 
@@ -78,6 +81,37 @@ public class OrderingTests {
 			if (testArray[i] != reversedArray[i])
 				fail("Arrays do not match.");			
 	}
+	
+	@Test
+	public void test_reverse_list() {
+		// test the reverse optimization for List<T>
+		
+		Integer[] numbers = new Integer[] {34, 76, 3, 12, 55, 23, 105, 67, 12};
+		List<Integer> sourceList = Arrays.asList(numbers); 
+		Iterable<Integer> testList = Query.list(sourceList).reverse();
+		Integer[] reversedArray = new Integer[] {12, 67, 105, 23, 55, 12, 3, 76, 34};		
+		
+		// check if the ListReverseIterable is used
+		Object containedIter = null;
+		try {
+			Field f = testList.getClass().getDeclaredField("containedIter");
+			f.setAccessible(true);
+			containedIter = f.get(testList);
+		} catch (Exception e) {
+			fail();
+		} 
+		
+		assertTrue(containedIter instanceof ListReverseIterable);
+		
+		// test if the list was reversed
+		
+		int idx = 0;
+		for(Integer number: testList) {
+			if (number != reversedArray[idx])
+				fail("Arrays do not match.");
+			idx++;
+		}		
+	}	
 	
 	class TestPerson {
 		public String firstName;

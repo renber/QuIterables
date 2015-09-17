@@ -1,12 +1,15 @@
 package de.renber.quiterables.tests;
 
 import static org.junit.Assert.*;
+import static de.renber.quiterables.QuIterables.*;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.function.Function;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -28,7 +31,7 @@ public class QueryTests {
 	public void createSampleData() {
 		// generate test data for each test case
 		// will be generated anew for each test
-		sampleData = new ArrayList<>();
+		sampleData = new ArrayList<>();			
 
 		sampleData.add(new TestPojo("Item One", 1, "Child 1", "Child 2"));
 		sampleData.add(new TestPojo("Item Two", 2, "Child 1"));
@@ -38,10 +41,35 @@ public class QueryTests {
 		sampleData.add(new TestPojo("Item Four b", 4, "Child 1", "Child 2", "Child 3"));
 	}
 	
+	interface Action {
+		public void execute();
+	}
+	
+	/**
+	 * Test if the given Action f throws the given Exception
+	 * If not, then the test fails
+	 */
+	private <T extends Exception> void testForException(Class<T> exceptionClass, Action f) {
+		try
+		{
+			f.execute();
+			fail("Expected exception: " + exceptionClass.getName());
+		} catch (Exception e) {
+			if (e.getClass() != exceptionClass)
+				fail("Unexpected exception: " + e.getClass().getName() + ", expected: " + exceptionClass.getName());
+		}
+	}
+	
 	// --------------
 	// The test cases
 	// --------------	
 
+	@Test
+	public void test_isEmpty() {
+		Queriable<String> qList = Query.list(new ArrayList<String>());
+		assertTrue(qList.isEmpty());
+	}
+	
 	@Test
 	public void test_where() {
 		List<TestPojo> resultList = Query.list(sampleData)
@@ -62,28 +90,48 @@ public class QueryTests {
 		boolean result = Query.list(sampleData).exists(x -> "Item Five".equals(x.textItem));
 		assertFalse(result);
 	}
+	
+	@Test
+	public void test_first_positive() {
+		// test parameterless first
+		TestPojo p = Query.list(sampleData).first();
+		assertNotNull(p);
+		assertEquals("Item One", p.textItem);
+		assertEquals(1, p.numberItem);
+		
+		// test conditional first
+		p = Query.list(sampleData).first(x -> x.numberItem == 3);
+		assertNotNull(p);
+		assertEquals("Item Three", p.textItem);
+		assertEquals(3, p.numberItem);
+	}
+	
+	@Test(expected=NoSuchElementException.class)
+	public void test_first_negative() {
+		Query.list(sampleData).first(x -> x.numberItem == 23);
+	}
 
 	@Test
 	public void test_firstOrDefault_positive() {
-		// test parameterless firstOrDefault
+		// test parameterless first
 		TestPojo p = Query.list(sampleData).firstOrDefault();
 		assertNotNull(p);
 		assertEquals("Item One", p.textItem);
 		assertEquals(1, p.numberItem);
 		
-		// test conditional firstOrDefault
+		// test conditional first
 		p = Query.list(sampleData).firstOrDefault(x -> x.numberItem == 3);
 		assertNotNull(p);
 		assertEquals("Item Three", p.textItem);
 		assertEquals(3, p.numberItem);
 	}
-
+	
 	@Test
 	public void test_firstOrDefault_negative() {
 		TestPojo p = Query.list(sampleData).firstOrDefault(x -> x.numberItem == 23);
 
 		assertNull(p);
-	}
+	}	
 	
 	@Test
 	public void test_lastOrDefault_positive() {
@@ -99,6 +147,21 @@ public class QueryTests {
 		assertEquals("Item Three b", p.textItem);
 		assertEquals(3, p.numberItem);
 	}
+	
+	@Test
+	public void test_last_positive() {
+		// test parameterless last
+		TestPojo p = Query.list(sampleData).last();
+		assertNotNull(p);
+		assertEquals("Item Four b", p.textItem);
+		assertEquals(4, p.numberItem);
+		
+		// test conditional last
+		p = Query.list(sampleData).last(x -> x.numberItem == 3);
+		assertNotNull(p);
+		assertEquals("Item Three b", p.textItem);
+		assertEquals(3, p.numberItem);
+	}	
 
 	@Test
 	public void test_lastOrDefault_negative() {
@@ -106,6 +169,63 @@ public class QueryTests {
 
 		assertNull(p);
 	}	
+	
+	@Test(expected=NoSuchElementException.class)
+	public void test_last_negative() {
+		Query.list(sampleData).last(x -> x.numberItem == 23);
+	}		
+	
+	@Test
+	public void test_singleOrDefault_positive() {
+		// test parameterless single
+		List<String> testList = Arrays.asList(new String[] {"Item One"});
+		assertEquals("Item One", Query.iterable(testList).singleOrDefault());
+		
+		// test conditional single
+		testList = Arrays.asList(new String[] {"Item One", "Item Two", "Item Three"});
+		assertEquals("Item Two", Query.iterable(testList).singleOrDefault(x -> "Item Two".equals(x)));
+	}
+	
+	@Test
+	public void test_single_positive() {
+		// test parameterless single
+		List<String> testList = Arrays.asList(new String[] {"Item One"});
+		assertEquals("Item One", Query.iterable(testList).single());
+		
+		// test conditional single
+		testList = Arrays.asList(new String[] {"Item One", "Item Two", "Item Three"});
+		assertEquals("Item Two", Query.iterable(testList).single(x -> "Item Two".equals(x)));
+	}
+	
+	@Test
+	public void test_singleOrDefault_negative() {
+		// test parameterless singleOrDefault
+		List<String> testList = Arrays.asList(new String[] {"Item One", "Item Two"});
+		assertNull(Query.iterable(testList).singleOrDefault());
+
+		List<String> emptyList = new ArrayList<String>();
+		assertNull(Query.iterable(emptyList).singleOrDefault());
+		
+		// test conditional singleOrDefault
+		List<String> testListTwo = Arrays.asList(new String[] {"Item One", "Item Two", "Element Three", "Element Four"});
+		assertNull(Query.iterable(testListTwo).singleOrDefault(x -> x.startsWith("Element")));
+		assertNull(Query.iterable(testListTwo).singleOrDefault(x -> x.startsWith("Dummy")));
+	}
+	
+	@Test
+	public void test_single_negative() {
+		// test parameterless single
+		final List<String> testList = Arrays.asList(new String[] {"Item One", "Item Two"});
+		testForException(NoSuchElementException.class, () -> Query.iterable(testList).single());
+
+		final List<String> emptyList = new ArrayList<String>();
+		testForException(NoSuchElementException.class, () -> Query.iterable(emptyList).single());
+		
+		// test conditional single
+		final List<String> testListTwo = Arrays.asList(new String[] {"Item One", "Item Two", "Element Three", "Element Four"});
+		testForException(NoSuchElementException.class, () -> Query.iterable(testListTwo).single(x -> x.startsWith("Element")));
+		testForException(NoSuchElementException.class, () -> Query.iterable(testListTwo).single(x -> x.startsWith("Dummy")));
+	}
 
 	@Test
 	public void test_all_positive() {
@@ -149,6 +269,16 @@ public class QueryTests {
 		List<String> resultList = Query.list(testList).distinct().toList();
 		
 		assertEquals(2, resultList.size());
+	}
+	
+	@Test
+	public void test_distinct_with_equivalence() {
+		List<String> testList = new ArrayList<String>(Arrays.asList(new String[] {"One", "Two", "Three", "Four"}));
+		// we consider equality now to be "same number of letters
+		// ergo One and Two are now considered equal and Two is skipped
+		List<String> resultList = Query.list(testList).distinct((x,y) -> x.length() == y.length()).toList();
+		
+		assertEquals(3, resultList.size());
 	}
 	
 	@Test

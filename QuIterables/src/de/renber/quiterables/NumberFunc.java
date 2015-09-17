@@ -1,5 +1,5 @@
 /*******************************************************************************
- * This file is part of the Java IterQuery Library
+ * This file is part of the Java QuIterables Library
  *
  * The MIT License (MIT)
  *
@@ -30,7 +30,6 @@ package de.renber.quiterables;
  * require an ItemFunc with a fixed result type of Number
  * @author berre
  */
-@FunctionalInterface
 public interface NumberFunc<T> {
 	/**
 	 * Get a numerical value for the given item	 

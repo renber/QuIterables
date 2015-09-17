@@ -1,5 +1,5 @@
 /*******************************************************************************
- * This file is part of the Java IterQuery Library
+ * This file is part of the Java QuIterables Library
  *
  * The MIT License (MIT)
  *
@@ -26,6 +26,7 @@
 package de.renber.quiterables;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import de.renber.quiterables.grouping.GroupFunction;
 import de.renber.quiterables.grouping.GroupedQueriable;
@@ -36,7 +37,24 @@ import de.renber.quiterables.grouping.SingleKeyGroupFunction;
  * @author berre
  */
 public interface Queriable<T> extends Iterable<T> {
-	    		
+	    	
+	/**
+	 * Return if the enumeration is empty	 
+	 */
+	public boolean isEmpty();
+	
+	/**
+	 * Return the element at the given position or throw NoSuchElementException
+	 * if no element at this index exits (i.e. the enumeration contains less than (index+1) elements)
+	 */
+	public T elementAt(int index) throws NoSuchElementException;
+	
+	/**
+	 * Return the element at the given position or return null
+	 * if no element at this index exits (i.e. the enumeration contains less than (index+1) elements)
+	 */
+	public T elementAtOrDefault(int index) throws NoSuchElementException;	
+	
 	/**
      * Return if all elements in the enumeration fulfill the given predicate
      *     
@@ -53,9 +71,20 @@ public interface Queriable<T> extends Iterable<T> {
     public boolean exists(Predicate<T> predicate); 
     
     /**
-     * Return the first element of the enumeration or null if the list is empty             
+     * Return the first element of the enumeration or throw NoSuchElementException if the enumeration is empty             
+     */
+    public T first() throws NoSuchElementException;
+    
+    /**
+     * Return the first element of the enumeration or null if the enumeration is empty             
      */
     public T firstOrDefault();
+    
+    /**
+     * Return the first element of the enumeration for which the predicate is true
+     * or throw NoSuchElementException if no corresponding element exists     
+     */
+    public T first(Predicate<T> predicate) throws NoSuchElementException;
     
     /**
      * Return the first element in the enumeration for which the predicate is true or
@@ -66,9 +95,20 @@ public interface Queriable<T> extends Iterable<T> {
     public T firstOrDefault(Predicate<T> predicate);
     
     /**
+     * Return the last element of the enumeration or throw NoSuchElementException if the enumeration is empty             
+     */
+    public T last() throws NoSuchElementException;
+    
+    /**
      * Return the last element of the enumeration or null if the list is empty             
      */
     public T lastOrDefault();
+    
+    /**
+     * Return the last element of the enumeration for which the predicate is true
+     * or throw NoSuchElementException if no corresponding element exists           
+     */
+    public T last(Predicate<T> predicate) throws NoSuchElementException;
     
     /**
      * Return the last element in the enumeration for which the predicate is true or
@@ -78,6 +118,30 @@ public interface Queriable<T> extends Iterable<T> {
      * @return 
      */
     public T lastOrDefault(Predicate<T> predicate);    
+    
+    /**
+     * If the iterable contains only one element return this element.
+     * Otherwise throw NoSuchElementException (i.e. if list is empty or contains more than 1 element)     
+     */
+    public T single() throws NoSuchElementException;
+    
+    /**
+     * If the iterable contains only one element which satisfies the condition return this element.
+     * Otherwise throw NoSuchElementException (i.e. if no or multiple elements satisfies the condition)     
+     */
+    public T single(Predicate<T> predicate) throws NoSuchElementException;    
+    
+    /**
+     * If the iterable contains only one element return this element.
+     * Otherwise return null (i.e. if list is empty or contains more than 1 element)     
+     */
+    public T singleOrDefault();
+    
+    /**
+     * If the iterable contains only one element which satisfies the condition return this element.
+     * Otherwise return null (i.e. if no or multiple elements satisfies the condition)     
+     */
+    public T singleOrDefault(Predicate<T> predicate);        
     
     /**
      * Return the amount of elements in the enumeration if it is finite      
@@ -138,10 +202,12 @@ public interface Queriable<T> extends Iterable<T> {
      * @param selector The transformation function
      * @return
      */	
-	public <T2> Queriable<T2> selectMany(Selector<T, List<T2>> selector);
+	public <T2> Queriable<T2> selectMany(Selector<T, Iterable<T2>> selector);
         
     /**
      * Cast each element of the enumeration to the given type and return an enumeration of this type     
+     * (This is an unchecked cast, so if any element in the enumeration cannot be cast to the given type
+     * an exception will be thrown)
      * @param targetType
      */	
 	public <TOut> Queriable<TOut> cast(Class<TOut> targetType);
@@ -149,9 +215,14 @@ public interface Queriable<T> extends Iterable<T> {
     /**
      * Returns an enumeration where each item of the enumeration appears exactly once
      * (Equality is checked using the equals(...) method)     
-     * @param targetType
      */	
-	public Queriable<T> distinct();	
+	public Queriable<T> distinct();
+	
+	/**
+     * Returns an enumeration where each item of the enumeration appears exactly once
+     * (Equality is checked using the given equalityComparer)     
+     */	
+	public Queriable<T> distinct(Equivalence<T> equalityComparer);	
 	
 	/**
 	 * Take the given amount of elements from the enumeration or

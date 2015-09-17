@@ -1,5 +1,5 @@
 /*******************************************************************************
- * This file is part of the Java IterQuery Library
+ * This file is part of the Java QuIterables Library
  *
  * The MIT License (MIT)
  *
@@ -29,7 +29,6 @@ package de.renber.quiterables;
  * A function which transforms one object type into another
  * @author berre
  */
-@FunctionalInterface
 public interface Selector<TIn, TOut> {
 
 	public TOut select(TIn item);

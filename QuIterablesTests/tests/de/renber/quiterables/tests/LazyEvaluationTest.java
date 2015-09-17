@@ -94,8 +94,7 @@ public class LazyEvaluationTest {
 		assertFalse(sampleData.get(2).wasQueried);
 		assertFalse(sampleData.get(3).wasQueried);
 		
-		assertFalse(it.hasNext());
-		assertNull(it.next());
+		assertFalse(it.hasNext());		
 	}	
 	
 	@Test
@@ -111,35 +110,6 @@ public class LazyEvaluationTest {
 		
 		assertEquals(new Integer(20), allNumbers.skipWhile(x -> x < 20).firstOrDefault());
 	}	
-
-	class LazyObject
-	{
-		private String text = "";
-		private Integer value = 0;
-		
-		public boolean wasQueried = false;
-		
-		public LazyObject(String _text, int _value) {
-			text = _text;
-			value = _value;
-		}
-		
-		/**
-		 * Returns this object's text and marks the object as queried		 
-		 */
-		public String getText() {
-			wasQueried = true;
-			return text;
-		}		
-		
-		/**
-		 * Returns this object's int value and marks the object as queried		 
-		 */
-		public int getValue() {
-			wasQueried = true;
-			return value;
-		}
-	}
 	
 	class GenericIterable<T> implements Iterable<T>
 	{

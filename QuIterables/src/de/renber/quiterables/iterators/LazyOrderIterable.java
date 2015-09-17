@@ -1,5 +1,5 @@
 /*******************************************************************************
- * This file is part of the Java IterQuery Library
+ * This file is part of the Java QuIterables Library
  *
  * The MIT License (MIT)
  *
@@ -72,7 +72,8 @@ public class LazyOrderIterable<T> implements Iterable<T> {
 
 		if (sortedList == null) {
 			sortedList = new ArrayList<T>();
-			wrapped.forEach(sortedList::add);
+			for(T element: wrapped)
+				sortedList.add(element);
 
 			Collections.sort(sortedList, new Comparator<T>() {
 				
@@ -98,6 +99,10 @@ public class LazyOrderIterable<T> implements Iterable<T> {
 		return sortedList.iterator();
 	}
 
+	/**
+	 * Holds an order function and the requested sort order
+	 * @author René Bergelt	 
+	 */
 	class OrderFunc<T> {
 		public ItemFunc<T, Comparable> func;
 		public SortOrder sortOrder; 

@@ -23,21 +23,52 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *******************************************************************************/
-package de.renber.quiterables.grouping;
+package de.renber.quiterables.iterators;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Iterator;
+
+import de.renber.quiterables.Predicate;
+import de.renber.quiterables.Selector;
 
 /**
- * Represents a list with elements which all share the same group key
- * 
- * @author berre
- * 
+ * Iterable which converts the elements of a source iterable of type TIn to
+ * elements of type TOut using a Selector function 
+ *
+ * @param <T>
  */
-public interface Group<T> extends List<T> {
+public class LazySelectIterable<TIn, TOut> implements Iterable<TOut> {
 
-	/**
-	 * returns this group's group key	 
-	 */
-	public GroupKey getKey();
+	Iterable<TIn> wrapped;		
+	Selector<TIn, TOut> selectorFunc;
+	
+	public LazySelectIterable(Iterable<TIn> _wrapped, Selector<TIn, TOut> _selectorFunc) {
+		wrapped = _wrapped;
+		selectorFunc = _selectorFunc;
+	}
+	
+	@Override
+	public Iterator<TOut> iterator() {
+		return new LazySelectIterator<TIn, TOut>(wrapped.iterator(), selectorFunc);
+	}
+
+}
+
+class LazySelectIterator<TIn, TOut> extends LazyIterator<TOut> {
+
+	Iterator<TIn> wrapped;		
+	Selector<TIn, TOut> selectorFunc;
+	
+	public LazySelectIterator(Iterator<TIn> _wrapped, Selector<TIn, TOut> _selectorFunc) {
+		wrapped = _wrapped;
+		selectorFunc = _selectorFunc;
+	}
+	
+	@Override
+	protected TOut findNextElement() {
+		if (!wrapped.hasNext())
+			return null;
+		
+		return selectorFunc.select(wrapped.next());
+	}
+	
 }

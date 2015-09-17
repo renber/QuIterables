@@ -1,5 +1,5 @@
 /*******************************************************************************
- * This file is part of the Java IterQuery Library
+ * This file is part of the Java QuIterables Library
  *
  * The MIT License (MIT)
  *
@@ -29,7 +29,6 @@ package de.renber.quiterables;
  * A predicate function needed for some Queriable methods
  * @author berre
  */
-@FunctionalInterface
 public interface Predicate<T> { 
     public boolean evaluate(T item);   
 }

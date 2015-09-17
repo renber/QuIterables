@@ -1,5 +1,5 @@
 /*******************************************************************************
- * This file is part of the Java IterQuery Library
+ * This file is part of the Java QuIterables Library
  *
  * The MIT License (MIT)
  *
@@ -26,6 +26,7 @@
 package de.renber.quiterables.iterators;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import de.renber.quiterables.Predicate;
 
@@ -56,8 +57,9 @@ public abstract class LazyIterator<T> implements Iterator<T> {
 
 	@Override
 	public T next() {
-		if (ended)
-			return null;
+		if (ended) {
+			throw new NoSuchElementException("No more elements in iterator. Use hasNext() to check before calling next().");		
+		}
 
 		T currentElement = nextElement; // use the cached next element if
 										// available
@@ -85,5 +87,10 @@ public abstract class LazyIterator<T> implements Iterator<T> {
 	 * Return null to indicate that there will be no more objects
 	 */
 	protected abstract T findNextElement();
+	
+	@Override
+	public void remove() {
+		throw new UnsupportedOperationException();
+	}
 
 }

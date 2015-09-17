@@ -23,21 +23,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *******************************************************************************/
-package de.renber.quiterables.grouping;
+package de.renber.quiterables.iterators;
 
-import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 /**
- * Represents a list with elements which all share the same group key
- * 
- * @author berre
- * 
+ * Iterable which iterates a list in reverse
+ * @author René Bergelt
+ *
+ * @param <T>
  */
-public interface Group<T> extends List<T> {
+public class ListReverseIterable<T> implements Iterable<T> {
 
-	/**
-	 * returns this group's group key	 
-	 */
-	public GroupKey getKey();
+	List<T> list;
+	
+	public ListReverseIterable(List<T> _list) {
+		list = _list;		
+	}
+	
+	@Override
+	public Iterator<T> iterator() {
+		return new ListReverseIterator<T>(list.listIterator());
+	}
+}
+
+class ListReverseIterator<T> extends LazyIterator<T> {
+
+	ListIterator<T> listIterator;
+	
+	public ListReverseIterator(ListIterator<T> _listIterator) {
+		listIterator = _listIterator;
+	}
+	
+	@Override
+	protected T findNextElement() {
+		if (!listIterator.hasPrevious())
+			return null;
+		
+		return listIterator.previous();
+	}
+	
 }

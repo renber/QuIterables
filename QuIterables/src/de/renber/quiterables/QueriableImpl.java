@@ -1,5 +1,5 @@
 /*******************************************************************************
- * This file is part of the Java IterQuery Library
+ * This file is part of the Java QuIterables Library
  *
  * The MIT License (MIT)
  *
@@ -32,6 +32,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import de.renber.quiterables.grouping.Group;
 import de.renber.quiterables.grouping.GroupFunction;
@@ -42,6 +43,9 @@ import de.renber.quiterables.grouping.SingleKeyGroupFunction;
 import de.renber.quiterables.iterators.LazySkipIterable;
 import de.renber.quiterables.iterators.LazyTakeIterable;
 import de.renber.quiterables.iterators.LazyWhereIterable;
+import de.renber.quiterables.iterators.ListReverseIterable;
+import de.renber.quiterables.iterators.LazySelectIterable;
+import de.renber.quiterables.iterators.LazySelectManyIterable;
 
 /**
  * Actual Queriable<T> implementation used in this library and which is returned
@@ -61,6 +65,29 @@ class QueriableImpl<T> implements Queriable<T> {
 
 		containedIter = forIterable;
 	}
+	
+	// ***************************
+	// Some helper methods
+	// ***************************
+	
+	/**
+	 * Throws an IllegalArgumentException if any of the arguments is null
+	 */
+	private void throwIfAnyIsNull(Object...arguments) throws IllegalArgumentException {
+		for(Object argument: arguments)
+			if (argument == null)
+				throw new IllegalArgumentException("Argument must not be null.");		
+	}	
+	
+	/**
+	 * Either returns element or throws NoSuchElementException
+	 * if element is null
+	 */
+	private <TIn> TIn throwIfNull(TIn element) throws NoSuchElementException {
+		if (element == null)
+			throw new NoSuchElementException();
+		return element;
+	}
 
 	// ***************************
 	// Queriable<T> implementation
@@ -69,13 +96,16 @@ class QueriableImpl<T> implements Queriable<T> {
 	@Override
 	public List<T> toList() {
 		ArrayList<T> list = new ArrayList<T>();
-		containedIter.forEach(list::add);
+		for(T element: containedIter)
+			list.add(element);		
 		return list;
 	}
 
 	public T[] toArray(Class<T> classType) {
+		throwIfAnyIsNull(classType);
+		
 		// Todo: reduce memory consumption
-		// right now we have to iterate twice through containedIter
+		// right now we have to iterate twice through containedIter (first in count() then with the loop)
 		@SuppressWarnings("unchecked")
 		T[] a = (T[]) Array.newInstance(classType, count());
 		int idx = 0;
@@ -91,11 +121,48 @@ class QueriableImpl<T> implements Queriable<T> {
 	}
 
 	@Override
+	public boolean isEmpty() {
+		return !containedIter.iterator().hasNext();
+	}
+	
+	@Override
+	public T elementAt(int index) throws NoSuchElementException {
+		return throwIfNull(elementAtOrDefault(index));		
+	}
+	
+	@Override
+	public T elementAtOrDefault(int index) throws NoSuchElementException {
+		if (containedIter instanceof List) {
+			// if we wrap a list use the direct access
+			
+			List<T> innerList = (List<T>)containedIter;
+			if (index < innerList.size())
+				return innerList.get(index);
+			
+			return null;
+		}
+		
+		// we have to iterate to the given index
+		Iterator<T> it = containedIter.iterator();
+		for(int i = 0; i < index; i++) {
+			if (!it.hasNext())
+				return null;
+			it.next();
+		}
+		
+		return it.hasNext() ? it.next() : null;
+	}
+	
+	@Override
 	public Queriable<T> where(Predicate<T> predicate) {
+		throwIfAnyIsNull(predicate);
+		
 		return Query.iterable(new LazyWhereIterable<T>(containedIter, predicate));
 	}
 
 	public boolean all(Predicate<T> predicate) {
+		throwIfAnyIsNull(predicate);
+		
 		for (T item : containedIter) {
 			if (!predicate.evaluate(item)) {
 				return false;
@@ -107,6 +174,8 @@ class QueriableImpl<T> implements Queriable<T> {
 
 	@Override
 	public boolean exists(Predicate<T> predicate) {
+		throwIfAnyIsNull(predicate);
+		
 		for (T item : containedIter) {
 			if (predicate.evaluate(item)) {
 				return true;
@@ -117,7 +186,27 @@ class QueriableImpl<T> implements Queriable<T> {
 	}
 
 	@Override
+	public T first() throws NoSuchElementException {
+		return throwIfNull(firstOrDefault());		
+	}
+	
+	@Override
+	public T firstOrDefault() {
+		Iterator<T> it = containedIter.iterator();
+		return it.hasNext() ? it.next() : null;
+	}
+	
+	@Override
+	public T first(Predicate<T> predicate) throws NoSuchElementException {
+		throwIfAnyIsNull(predicate);
+		
+		return throwIfNull(firstOrDefault(predicate));		
+	}
+	
+	@Override
 	public T firstOrDefault(Predicate<T> predicate) {
+		throwIfAnyIsNull(predicate);
+		
 		for (T item : containedIter) {
 			if (predicate.evaluate(item)) {
 				return item;
@@ -128,11 +217,10 @@ class QueriableImpl<T> implements Queriable<T> {
 	}
 
 	@Override
-	public T firstOrDefault() {
-		Iterator<T> it = containedIter.iterator();
-		return it.hasNext() ? it.next() : null;
+	public T last() throws NoSuchElementException {
+		return throwIfNull(lastOrDefault());		
 	}
-
+	
 	@Override
 	public T lastOrDefault() {
 		Iterator<T> it = containedIter.iterator();
@@ -143,15 +231,66 @@ class QueriableImpl<T> implements Queriable<T> {
 
 		return lastElement;
 	}
-
+	
 	@Override
-	public T lastOrDefault(Predicate<T> predicate) {
-		return Query.iterable(containedIter).where(predicate).lastOrDefault();
+	public T last(Predicate<T> predicate) throws NoSuchElementException {
+		throwIfAnyIsNull(predicate);
+		
+		return throwIfNull(lastOrDefault(predicate));
 	}
 
 	@Override
-	public int count() {
-		int c = 0;
+	public T lastOrDefault(Predicate<T> predicate) {
+		throwIfAnyIsNull(predicate);
+		
+		return Query.iterable(containedIter).where(predicate).lastOrDefault();
+	}
+	
+	@Override
+    public T single() throws NoSuchElementException {
+		return throwIfNull(singleOrDefault());		
+    }
+
+	@Override
+    public T singleOrDefault() {
+		Iterator<T> it = containedIter.iterator();
+    	
+		if (!it.hasNext())
+    		// enumeration is empty
+    		return null;
+    	
+    	T element = it.next();
+    	
+    	if (it.hasNext()) 
+    		// enumeration contains more than one element
+    		return null;
+    	
+    	return element;
+    }
+    
+	@Override
+    public T single(Predicate<T> predicate) throws NoSuchElementException {
+		throwIfAnyIsNull(predicate);
+		
+		return throwIfNull(singleOrDefault(predicate));
+    }
+	
+	@Override
+    public T singleOrDefault(Predicate<T> predicate) {
+		throwIfAnyIsNull(predicate);
+		
+		return Query.iterable(containedIter).where(predicate).singleOrDefault();
+	}
+	
+	@Override
+	public int count() {		
+		// if the wrapped Iterable is a list we do not
+		// have to iterate to get the number of elements;
+		if (containedIter instanceof Collection) {
+			return ((Collection<T>)containedIter).size();
+		}				
+		
+		int c = 0;		
 		for (Iterator<T> it = containedIter.iterator(); it.hasNext(); it.next())
 			c++;
 		return c;
@@ -159,6 +298,8 @@ class QueriableImpl<T> implements Queriable<T> {
 
 	@Override
 	public int count(Predicate<T> predicate) {
+		throwIfAnyIsNull(predicate);
+		
 		int c = 0;
 		for (T element : containedIter)
 			if (predicate.evaluate(element))
@@ -169,6 +310,8 @@ class QueriableImpl<T> implements Queriable<T> {
 
 	@Override
 	public Number max(NumberFunc<T> valFunc) {
+		throwIfAnyIsNull(valFunc);
+		
 		Number max = null;
 
 		for (T item : containedIter) {
@@ -192,6 +335,8 @@ class QueriableImpl<T> implements Queriable<T> {
 
 	@Override
 	public Number min(NumberFunc<T> valFunc) {
+		throwIfAnyIsNull(valFunc);
+		
 		Number min = null;
 
 		for (T item : containedIter) {
@@ -211,9 +356,11 @@ class QueriableImpl<T> implements Queriable<T> {
 
 		return min;
 	}
-
+	
 	@Override
 	public Number sum(NumberFunc<T> valFunc) {
+		throwIfAnyIsNull(valFunc);
+		
 		Number sum = null;
 
 		for (T item : containedIter) {
@@ -243,30 +390,30 @@ class QueriableImpl<T> implements Queriable<T> {
 
 	@Override
 	public <TOut> Queriable<TOut> select(Selector<T, TOut> selector) {
-		List<TOut> rList = new ArrayList<TOut>();
-		for (T item : containedIter) {
-			rList.add(selector.select(item));
-		}
-		return Query.list(rList);
+		throwIfAnyIsNull(selector);
+		
+		return new QueriableImpl<TOut>(new LazySelectIterable<T, TOut>(containedIter, selector));
 	}
 
 	@Override
-	public <TOut> Queriable<TOut> selectMany(Selector<T, List<TOut>> selector) {
-		List<TOut> rList = new ArrayList<TOut>();
-		for (T item : containedIter) {
-			rList.addAll(selector.select(item));
-		}
-		return Query.list(rList);
+	public <TOut> Queriable<TOut> selectMany(Selector<T, Iterable<TOut>> selector) {
+		throwIfAnyIsNull(selector);
+		
+		return new QueriableImpl<TOut>(new LazySelectManyIterable<T, TOut>(containedIter, selector));
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	@Override
 	public <TOut> Queriable<TOut> cast(Class<TOut> targetType) {
-		List rList = new ArrayList();
-		for (T o : containedIter) {
-			rList.add(o);
-		}
-		return Query.list(rList);
+		throwIfAnyIsNull(targetType);
+		
+		// use select with a selector which casts the elements
+		return new QueriableImpl<TOut>(new LazySelectIterable<T, TOut>(containedIter, 
+			new Selector<T, TOut>() {
+			@Override
+			public TOut select(T item) {
+				return (TOut)item;
+			}}));		
 	}
 
 	@Override
@@ -275,10 +422,27 @@ class QueriableImpl<T> implements Queriable<T> {
 		Queriable<T> ql = Query.list(rList);
 
 		for (T o : containedIter) {
-
 			final T fo = o;
 
-			if (!ql.exists((x) -> x.equals(fo))) {
+			if (!ql.exists(new Predicate<T>() {public boolean evaluate(T item) {return item.equals(fo);	}})) {
+				rList.add(o);
+			}
+		}
+
+		return Query.list(rList);
+	}
+	
+	@Override
+	public Queriable<T> distinct(final Equivalence<T> equalityComparer) {
+		throwIfAnyIsNull(equalityComparer);
+		
+		List<T> rList = new ArrayList<T>();
+		Queriable<T> ql = Query.list(rList);
+
+		for (T o : containedIter) {
+			final T fo = o;
+
+			if (!ql.exists(new Predicate<T>() {public boolean evaluate(T item) {return equalityComparer.areEqual(item,  fo);}})) {
 				rList.add(o);
 			}
 		}
@@ -293,6 +457,8 @@ class QueriableImpl<T> implements Queriable<T> {
 
 	@Override
 	public Queriable<T> takeWhile(Predicate<T> condition) {
+		throwIfAnyIsNull(condition);
+		
 		return Query.iterable(new LazyTakeIterable<T>(containedIter, condition));
 	}
 
@@ -302,29 +468,44 @@ class QueriableImpl<T> implements Queriable<T> {
 	}
 
 	public Queriable<T> skipWhile(Predicate<T> condition) {
+		throwIfAnyIsNull(condition);
+		
 		return Query.iterable(new LazySkipIterable<T>(containedIter, condition));
 	}
 
 	@Override
 	public OrderedQueriable<T> orderBy(ItemFunc<T, Comparable> func) {
+		throwIfAnyIsNull(func);
+		
 		return new OrderedQueriableImpl<T>(containedIter, func, SortOrder.Ascending);
 	}
 	
 	@Override
 	public OrderedQueriable<T> orderByDescending(ItemFunc<T, Comparable> func) {
+		throwIfAnyIsNull(func);
+		
 		return new OrderedQueriableImpl<T>(containedIter, func, SortOrder.Descending);			
 	}
 	
 	@Override
 	public Queriable<T> reverse() {
-		List<T> lst = toList();
-		// TODO: maybe better use ListIterator and its hasPrevious() and previous() methods
+		
+		// if the wrapped Iterable is a list we can use
+		// the ListIterator to traverse it in reverse order
+		if (containedIter instanceof List) {
+			return Query.iterable(new ListReverseIterable<T>((List<T>)containedIter));
+		}
+		
+		// otherwise we have to enumerate all elements and reverse the collection afterwards
+		List<T> lst = toList();		
 		Collections.reverse(lst);
-		return new QueriableImpl<T>(lst);
+		return Query.iterable(lst);
 	}
 
 	@Override
 	public GroupedQueriable<T> group(GroupFunction<T> func) {
+		throwIfAnyIsNull(func);
+		
 		HashMap<GroupKey, Group<T>> groups = new HashMap<GroupKey, Group<T>>();
 		// put each element into a group
 		for (T element : containedIter) {
@@ -350,8 +531,14 @@ class QueriableImpl<T> implements Queriable<T> {
 	}
 
 	@Override
-	public GroupedQueriable<T> groupSingle(SingleKeyGroupFunction<T> func) {
-		return group(x -> new GroupKey(func.getKeyElementFor(x)));
+	public GroupedQueriable<T> groupSingle(final SingleKeyGroupFunction<T> func) {
+		throwIfAnyIsNull(func);
+		
+		return group(new GroupFunction<T>() {
+			@Override
+			public GroupKey getKeyFor(T element) {
+				return new GroupKey(func.getKeyElementFor(element));
+			}});
 	}
 
 	// --------------------------

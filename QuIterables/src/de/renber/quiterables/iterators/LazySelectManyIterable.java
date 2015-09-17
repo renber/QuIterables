@@ -23,47 +23,63 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *******************************************************************************/
-package de.renber.quiterables.iterators.primitivetypes;
+package de.renber.quiterables.iterators;
 
 import java.util.Iterator;
 
-import de.renber.quiterables.iterators.LazyIterator;
+import de.renber.quiterables.Predicate;
+import de.renber.quiterables.Selector;
 
 /**
- * An Iterable wrapper for primitive-type byte-arrays
- * @author René Bergelt
+ * Iterable which converts the elements of a source iterable of type TIn to
+ * an Iterable of type TOut using a Selector function and flattens the result enumeration 
  *
+ * @param <T>
  */
-public class ByteArrayIterable implements Iterable<Byte> {
+public class LazySelectManyIterable<TIn, TOut> implements Iterable<TOut> {
 
-	byte[] wrapped;
+	Iterable<TIn> wrapped;		
+	Selector<TIn, Iterable<TOut>> selectorFunc;
 	
-	public ByteArrayIterable(byte[] array) {
-		wrapped = array;
+	public LazySelectManyIterable(Iterable<TIn> _wrapped, Selector<TIn, Iterable<TOut>> _selectorFunc) {
+		wrapped = _wrapped;
+		selectorFunc = _selectorFunc;
 	}
 	
 	@Override
-	public Iterator<Byte> iterator() {
-		return new ByteArrayIterator(wrapped);
+	public Iterator<TOut> iterator() {
+		return new LazySelectManyIterator<TIn, TOut>(wrapped.iterator(), selectorFunc);
 	}
+
 }
 
-class ByteArrayIterator extends LazyIterator<Byte>
-{
-	byte[] wrapped;
-	int currentIndex = 0;
+class LazySelectManyIterator<TIn, TOut> extends LazyIterator<TOut> {
+
+	Iterator<TIn> wrapped;		
+	Iterator<TOut> subIter;
 	
-	public ByteArrayIterator(byte[] array) {
-		wrapped = array;
+	Selector<TIn, Iterable<TOut>> selectorFunc;
+	
+	public LazySelectManyIterator(Iterator<TIn> _wrapped, Selector<TIn, Iterable<TOut>> _selectorFunc) {
+		wrapped = _wrapped;
+		selectorFunc = _selectorFunc;
 	}
 	
 	@Override
-	protected Byte findNextElement() {
-		if (wrapped == null || currentIndex >= wrapped.length)
+	protected TOut findNextElement() {		
+		// check if we have more items in the sub iterator
+		if (subIter != null) {
+			if (subIter.hasNext())
+				return subIter.next();
+			
+			subIter = null;
+		}
+		
+		if (!wrapped.hasNext())
 			return null;
 		
-		byte element = wrapped[currentIndex];
-		currentIndex++;
-		return element;
-	}	
+		subIter = selectorFunc.select(wrapped.next()).iterator();
+		return findNextElement();		
+	}
+	
 }

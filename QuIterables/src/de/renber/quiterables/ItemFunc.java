@@ -1,5 +1,5 @@
 /*******************************************************************************
- * This file is part of the Java IterQuery Library
+ * This file is part of the Java QuIterables Library
  *
  * The MIT License (MIT)
  *
@@ -29,7 +29,6 @@ package de.renber.quiterables;
  * A function needed for some Queriable methods, where a complex return value per item is required
  * @author berre
  */
-@FunctionalInterface
 public interface ItemFunc<TArg, TRet> {
 
 	public TRet exec(TArg item);

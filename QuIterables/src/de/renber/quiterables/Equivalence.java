@@ -23,21 +23,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *******************************************************************************/
-package de.renber.quiterables.grouping;
-
-import java.util.ArrayList;
-import java.util.List;
+package de.renber.quiterables;
 
 /**
- * Represents a list with elements which all share the same group key
- * 
- * @author berre
- * 
+ * Interface for functions which compare elements for equality
+ * @author René Bergelt
  */
-public interface Group<T> extends List<T> {
+public interface Equivalence<T> {
 
 	/**
-	 * returns this group's group key	 
+	 * Return if the two elements are considered equal	 
 	 */
-	public GroupKey getKey();
+	public boolean areEqual(T element1, T element2);
+	
 }
