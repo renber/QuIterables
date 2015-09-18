@@ -23,65 +23,55 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *******************************************************************************/
-package de.renber.utils;
+package de.renber.quiterables.iterators;
 
 import java.util.Iterator;
-import java.util.List;
 
-public class StringUtils {
+/**
+ * Iterable which concatenates two other iterables
+ * @author René Bergelt
+ *
+ */
+public class LazyConcatIterable<T> implements Iterable<T> {
 
-	private StringUtils() {		
+	Iterable<T> it1;
+	Iterable<T> it2;
+	
+	public LazyConcatIterable(Iterable<T> _it1, Iterable<T> _it2) {
+		it1 = _it1;
+		it2 = _it2;
 	}
 	
-	/**
-	 * Join the given array to a string by using the delimiter <br/>
-	 * a = {"A", "B", "C"}, delimiter = ";" <br/>
-	 * result: "A;B;C"
-	 * @param a
-	 * @param delimiter
-	 * @return
-	 */
-	public static String join(String[] a, String delimiter) {
-		if (a.length == 0) 
-			return "";
-		if (a.length == 1)
-			return a[0];
-		
-		StringBuilder sb = new StringBuilder();
-		
-		for(int i = 0; i < a.length - 1; i++) {
-			sb.append(a[i]).append(delimiter);
-		}
-		
-		sb.append(a[a.length-1]);
-		
-		return sb.toString();
+	@Override
+	public Iterator<T> iterator() {
+		return new LazyConcatIterator<T>(it1.iterator(), it2.iterator());
+	}
+}
+
+class LazyConcatIterator<T> extends LazyIterator<T> {
+
+	Iterator<T> it1;
+	Iterator<T> it2;
+	
+	boolean isInSecondIterator = false;
+	
+	public LazyConcatIterator(Iterator<T> _it1, Iterator<T> _it2) {
+		it1 = _it1;
+		it2 = _it2;
 	}
 	
-	/**
-	 * Join the elements in the iterable (by using their toString() method) to a string by using the delimiter <br/>
-	 * a = {"A", "B", "C"}, delimiter = ";" <br/>
-	 * result: "A;B;C"
-	 * @param a
-	 * @param delimiter
-	 * @return
-	 */
-	@SuppressWarnings("rawtypes")
-	public static String join(Iterable elements, String delimiter) {
-		
-		Iterator it = elements.iterator();
-		
-		if (elements == null || !it.hasNext()) 
-			return "";
-		
-		StringBuilder sb = new StringBuilder();
-		
-		for(Object element = it.next(); it.hasNext(); element = it.next()) {
-			sb.append(element.toString());
-			if (it.hasNext())
-				sb.append(delimiter);
+	@Override
+	protected T findNextElement() {
+		if (isInSecondIterator) {
+			return it2.hasNext() ? it2.next() : null;			
+		}
+		// still in the first iterator
+		if (!it1.hasNext()) {
+			isInSecondIterator = true;
+			return findNextElement();
 		}
 		
-		return sb.toString();
+		return it1.next();
 	}
+	
 }

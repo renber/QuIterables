@@ -25,7 +25,10 @@
  *******************************************************************************/
 package de.renber.quiterables;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.renber.quiterables.grouping.Group;
 import de.renber.quiterables.grouping.GroupKey;
@@ -51,16 +54,24 @@ class GroupedQueriableImpl<T> extends QueriableImpl<Group<T>> implements Grouped
 	@Override
 	public Queriable<T> get(GroupKey key) {
 		Group<T> g = getGroupedList().get(key);
-		if (g == null)
-			return null;
-		else
-			return new QueriableImpl<T>(g);
+		return g == null ? null : new QueriableImpl<T>(g); 		
 	}
 	
+	@Override
 	public GroupedList<T> toList() {
 		GroupedList<T> gl = new GroupedListImpl<T>();
 		gl.addAll(getGroupedList());
 		return gl;
 	}
 
+	@Override
+	public Map<GroupKey, Iterable<T>> toMap() {
+		HashMap<GroupKey, Iterable<T>> map = new HashMap<>();
+		
+		for(Group<T> group: this) {
+			map.put(group.getKey(), new ArrayList<T>(group));
+		}
+		
+		return map;
+	}
 }

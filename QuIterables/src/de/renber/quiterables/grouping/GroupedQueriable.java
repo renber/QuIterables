@@ -26,6 +26,7 @@
 package de.renber.quiterables.grouping;
 
 import java.util.List;
+import java.util.Map;
 
 import de.renber.quiterables.Queriable;
 
@@ -40,6 +41,17 @@ public interface GroupedQueriable<T> extends Queriable<Group<T>> {
 	 * Return the elements of the group with the given group keys
 	 */
 	public Queriable<T> get(GroupKey key);	
-		
+	
+	/**
+	 * Convert this grouped queriable to a grouped list
+	 */
+	@Override
 	public GroupedList<T> toList();
+	
+	/**
+	 * Convert	this grouped queriable to a map
+	 * where the keys are the groupkeys and the value is a iterable containing
+	 * the group's items
+	 */
+	public Map<GroupKey, Iterable<T>> toMap();
 }
