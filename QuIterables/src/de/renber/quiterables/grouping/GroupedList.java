@@ -47,4 +47,20 @@ public interface GroupedList<T> extends List<Group<T>> {
 	 * @return
 	 */
 	public Group<T> get(Object...keyElements);	
+	
+	/**
+	 * GroupedList.get(int) is ambiguous. To avoid confusion use either get(new GroupKey(int)) or elementAt(int) 
+	 * To conform to the java.util.List interface this method returns the element at the given position and _not_
+	 * the group with the given integer key
+	 * If you want to get the group with a specific numerical index use get(new Integer(value))	 
+	 */	
+	@Override
+	public Group<T> get(int index);
+		
+	/**
+	 * Return the element at the given position in the list
+	 * @param index
+	 * @return
+	 */
+	public Group<T> elementAt(int index);
 }

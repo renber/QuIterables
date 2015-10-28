@@ -31,21 +31,22 @@ import de.renber.quiterables.Predicate;
 import de.renber.quiterables.Selector;
 
 /**
- * Iterable which converts the elements of a source iterable of type TIn to
- * an Iterable of type TOut using a Selector function and flattens the result enumeration 
+ * Iterable which converts the elements of a source iterable of type TIn to an
+ * Iterable of type TOut using a Selector function and flattens the result
+ * enumeration
  *
  * @param <T>
  */
 public class LazySelectManyIterable<TIn, TOut> implements Iterable<TOut> {
 
-	Iterable<TIn> wrapped;		
+	Iterable<TIn> wrapped;
 	Selector<TIn, Iterable<TOut>> selectorFunc;
-	
+
 	public LazySelectManyIterable(Iterable<TIn> _wrapped, Selector<TIn, Iterable<TOut>> _selectorFunc) {
 		wrapped = _wrapped;
 		selectorFunc = _selectorFunc;
 	}
-	
+
 	@Override
 	public Iterator<TOut> iterator() {
 		return new LazySelectManyIterator<TIn, TOut>(wrapped.iterator(), selectorFunc);
@@ -55,31 +56,36 @@ public class LazySelectManyIterable<TIn, TOut> implements Iterable<TOut> {
 
 class LazySelectManyIterator<TIn, TOut> extends LazyIterator<TOut> {
 
-	Iterator<TIn> wrapped;		
+	Iterator<TIn> wrapped;
 	Iterator<TOut> subIter;
-	
+
 	Selector<TIn, Iterable<TOut>> selectorFunc;
-	
+
 	public LazySelectManyIterator(Iterator<TIn> _wrapped, Selector<TIn, Iterable<TOut>> _selectorFunc) {
 		wrapped = _wrapped;
 		selectorFunc = _selectorFunc;
 	}
-	
+
 	@Override
-	protected TOut findNextElement() {		
+	protected TOut findNextElement() {
 		// check if we have more items in the sub iterator
-		if (subIter != null) {
-			if (subIter.hasNext())
-				return subIter.next();
-			
-			subIter = null;
+		
+		// if we have many items which all contain no elements
+		// it was possible to get a StackOverFlow since findNextElement() keeps calling itself
+		// -> restructured to an iterative approach		
+		while (true) {
+			if (subIter != null) {
+				if (subIter.hasNext())
+					return subIter.next();
+
+				subIter = null;
+			}
+
+			if (!wrapped.hasNext())
+				return null;
+
+			subIter = selectorFunc.select(wrapped.next()).iterator();
 		}
-		
-		if (!wrapped.hasNext())
-			return null;
-		
-		subIter = selectorFunc.select(wrapped.next()).iterator();
-		return findNextElement();		
 	}
-	
+
 }

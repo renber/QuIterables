@@ -596,12 +596,19 @@ class QueriableImpl<T> implements Queriable<T> {
 			}}));		
 	}
 	
-	public <TOut> Queriable<TOut> ofType(Class<TOut> targetType) {
+	public <TOut> Queriable<TOut> ofType(final Class<TOut> targetType) {
 		throwIfArgumentIsNull(targetType);
 		
 		// first filter all elements which are of the given type
 		// then cast these elements
-		return Query.iterable(where(x -> targetType.isAssignableFrom(x.getClass())).cast(targetType));
+		return Query.iterable(where(
+				new Predicate<T>() {
+					@Override
+					public boolean evaluate(T item) {
+						return targetType.isAssignableFrom(item.getClass());
+					}}
+				
+				).cast(targetType));
 	}
 	
 	@Override
@@ -642,7 +649,7 @@ class QueriableImpl<T> implements Queriable<T> {
 	}
 	
 	@Override
-	public Queriable<T> intersect(Iterable<T> intersectWith, Equivalence<T> equalityComparer) {
+	public Queriable<T> intersect(Iterable<T> intersectWith, final Equivalence<T> equalityComparer) {
 		throwIfArgumentIsNull(intersectWith, equalityComparer);
 		
 		// TODO: maybe also do this lazy		
@@ -650,7 +657,13 @@ class QueriableImpl<T> implements Queriable<T> {
 		List<T> resultList = new ArrayList<T>();
 		
 		for(final T element: this) {
-			if (intersectQueriable.exists(x -> equalityComparer.areEqual(element, x)))
+			if (intersectQueriable.exists(
+					new Predicate<T>() {
+						@Override
+						public boolean evaluate(T item) {
+							 return equalityComparer.areEqual(element, item);
+						}}
+					))
 				resultList.add(element);
 		}
 		
@@ -674,7 +687,7 @@ class QueriableImpl<T> implements Queriable<T> {
 	}
 	
 	@Override
-	public Queriable<T> except(Iterable<T> elementsToSubtract, Equivalence<T> equalityComparer) {
+	public Queriable<T> except(Iterable<T> elementsToSubtract, final Equivalence<T> equalityComparer) {
 		throwIfArgumentIsNull(elementsToSubtract, equalityComparer);
 		
 		// TODO: maybe also do this lazy		
@@ -682,7 +695,14 @@ class QueriableImpl<T> implements Queriable<T> {
 		List<T> resultList = new ArrayList<T>();
 		
 		for(final T element: this) {
-			if (!intersectQueriable.exists(x -> equalityComparer.areEqual(element, x)))
+			if (!intersectQueriable.exists(					
+					new Predicate<T>() {
+						@Override
+						public boolean evaluate(T item) {
+							return equalityComparer.areEqual(element, item);
+						}}
+					
+					))
 				resultList.add(element);
 		}
 		
