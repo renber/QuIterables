@@ -25,6 +25,8 @@
  *******************************************************************************/
 package de.renber.quiterables;
 
+import de.renber.quiterables.grouping.GroupedList;
+import de.renber.quiterables.grouping.GroupedQueriable;
 import de.renber.quiterables.iterators.ArrayIterable;
 import de.renber.quiterables.iterators.primitivetypes.BooleanArrayIterable;
 import de.renber.quiterables.iterators.primitivetypes.ByteArrayIterable;
@@ -48,7 +50,7 @@ public class QuIterables {
 	 */
 	private QuIterables() {
 		// --
-	}
+	}	
 	
 	/**
 	 * Return a queriable object for the given iterable	
@@ -58,12 +60,19 @@ public class QuIterables {
 	}
 	
 	/**
+	 * Return a grouped queriable for the given grouped list
+	 */
+	public static <T> GroupedQueriable<T> query(GroupedList<T> groupedList) {
+		return new GroupedQueriableImpl<T>(groupedList);
+	}
+		
+	/**
 	 * Return a queriable object for the given iterable	
 	 */
 	public static <T> Queriable<T> query(T[] array) {
 		return new QueriableImpl<T>(new ArrayIterable<T>(array));
 	}
-	
+		
 	/**
 	 * Return a Queriable which wraps the given primitive-type int-array
 	 */

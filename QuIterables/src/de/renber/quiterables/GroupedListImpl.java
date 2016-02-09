@@ -26,6 +26,7 @@
 package de.renber.quiterables;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.renber.quiterables.grouping.Group;
 import de.renber.quiterables.grouping.GroupKey;
@@ -38,7 +39,15 @@ import de.renber.quiterables.grouping.GroupedList;
  * @param <T>
  */
 class GroupedListImpl<T> extends ArrayList<Group<T>> implements GroupedList<T>  {
+		
+	public GroupedListImpl() {
+		// --
+	}
 	
+	public GroupedListImpl(Iterable<Group<T>> elements) {		
+		for(Group<T> g: elements)
+			add(g);
+	}
 	
 	@Override
 	public Group<T> get(GroupKey key) {

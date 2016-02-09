@@ -440,7 +440,7 @@ public interface Queriable<T> extends Iterable<T> {
 	public T[] toArray(Class<T> classType);
 	
 	/**
-	 * Return an object which allows to transform this iterable to a primitive-type array	 	 
+	 * Return an object which allows to transform this Iterable to a primitive-type array	 	 
 	 */
 	public PrimitiveArrayTransformer<T> toPrimitiveArray();
 }

@@ -77,7 +77,7 @@ class QueriableImpl<T> implements Queriable<T> {
 	/**
 	 * Throws an IllegalArgumentException if any of the arguments is null
 	 */
-	private void throwIfArgumentIsNull(Object...arguments) throws IllegalArgumentException {
+	protected void throwIfArgumentIsNull(Object...arguments) throws IllegalArgumentException {
 		for(Object argument: arguments)
 			if (argument == null)
 				throw new IllegalArgumentException("Argument must not be null.");		

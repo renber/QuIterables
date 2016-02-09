@@ -36,7 +36,9 @@ import de.renber.quiterables.grouping.GroupedList;
 import de.renber.quiterables.grouping.GroupedQueriable;
 
 /**
- * The actual implementation of the GroupedQueriable<T> interface used in the library
+ * The actual implementation of the GroupedQueriable<T> interface used in the
+ * library
+ * 
  * @author René Bergelt
  *
  * @param <T>
@@ -44,19 +46,23 @@ import de.renber.quiterables.grouping.GroupedQueriable;
 class GroupedQueriableImpl<T> extends QueriableImpl<Group<T>> implements GroupedQueriable<T> {
 
 	protected GroupedList<T> getGroupedList() {
-		return (GroupedList<T>)containedIter;
+		return (GroupedList<T>) containedIter;
 	}
-	
+
 	public GroupedQueriableImpl(GroupedList<T> groupedList) {
 		super(groupedList);
 	}
+	
+	public GroupedQueriableImpl(Iterable<Group<T>> sequenceOfGroups) {
+		super(new GroupedListImpl<T>(sequenceOfGroups));
+	}		
 
 	@Override
 	public Queriable<T> get(GroupKey key) {
 		Group<T> g = getGroupedList().get(key);
-		return g == null ? null : new QueriableImpl<T>(g); 		
+		return g == null ? null : new QueriableImpl<T>(g);
 	}
-	
+
 	@Override
 	public GroupedList<T> toList() {
 		GroupedList<T> gl = new GroupedListImpl<T>();
@@ -67,11 +73,110 @@ class GroupedQueriableImpl<T> extends QueriableImpl<Group<T>> implements Grouped
 	@Override
 	public Map<GroupKey, Iterable<T>> toMap() {
 		HashMap<GroupKey, Iterable<T>> map = new HashMap<>();
-		
-		for(Group<T> group: this) {
+
+		for (Group<T> group : this) {
 			map.put(group.getKey(), new ArrayList<T>(group));
 		}
-		
+
 		return map;
+	}
+
+	// ---
+	// override return type of Queriable functions to GroupedQueriable for
+	// convenience (grouped lists, stay grouped)
+	// ---
+
+	@Override
+	public GroupedQueriable<T> where(Predicate<Group<T>> predicate) {
+		return new GroupedQueriableImpl<T>(super.where(predicate));		
+	}
+	
+	@Override
+	public GroupedQueriable<T> defaultIfEmpty(Group<T> defaultValue) {
+		return new GroupedQueriableImpl<T>(super.defaultIfEmpty(defaultValue));
+	}
+
+	@Override
+	public GroupedQueriable<T> concat(Iterable<Group<T>> toConcat) {
+		return new GroupedQueriableImpl<T>(super.concat(toConcat));
+	}
+
+	@Override
+	public GroupedQueriable<T> union(Iterable<Group<T>> toConcat) {
+		return new GroupedQueriableImpl<T>(super.union(toConcat));
+	}
+
+	@Override
+	public GroupedQueriable<T> union(Iterable<Group<T>> toConcat, Equivalence<Group<T>> equalityComparer) {
+		return new GroupedQueriableImpl<T>(super.union(toConcat, equalityComparer));
+	}
+
+	@Override
+	public GroupedQueriable<T> intersect(Iterable<Group<T>> intersectWith) {
+		return new GroupedQueriableImpl<T>(super.intersect(intersectWith));
+	}
+
+	@Override
+	public GroupedQueriable<T> intersect(Iterable<Group<T>> intersectWith, Equivalence<Group<T>> equalityComparer) {
+		return new GroupedQueriableImpl<T>(super.intersect(intersectWith, equalityComparer));
+	}
+
+	@Override
+	public GroupedQueriable<T> except(Iterable<Group<T>> elementsToSubtract) {
+		return new GroupedQueriableImpl<T>(super.except(elementsToSubtract));
+	}
+
+	@Override
+	public GroupedQueriable<T> except(Iterable<Group<T>> elementsToSubtract, Equivalence<Group<T>> equalityComparer) {
+		return new GroupedQueriableImpl<T>(super.except(elementsToSubtract, equalityComparer));
+	}
+
+	@Override
+	public GroupedQueriable<T> distinct() {
+		return new GroupedQueriableImpl<T>(super.distinct());
+	}
+
+	@Override
+	public GroupedQueriable<T> distinct(Equivalence<Group<T>> equalityComparer) {
+		return new GroupedQueriableImpl<T>(super.distinct(equalityComparer));
+	}
+
+	@Override
+	public GroupedQueriable<T> take(int amount) {
+		return new GroupedQueriableImpl<T>(super.take(amount));
+	}
+
+	@Override
+	public GroupedQueriable<T> takeWhile(Predicate<Group<T>> condition) {
+		return new GroupedQueriableImpl<T>(super.takeWhile(condition));
+	}
+
+	@Override
+	public GroupedQueriable<T> skip(int amount) {
+		return new GroupedQueriableImpl<T>(super.skip(amount));
+	}
+
+	@Override
+	public GroupedQueriable<T> skipWhile(Predicate<Group<T>> condition) {
+		return new GroupedQueriableImpl<T>(super.skipWhile(condition));
+	}
+
+	@Override
+	public GroupedQueriable<T> reverse() {
+		return new GroupedQueriableImpl<T>(super.reverse());
+	}
+	
+	@Override
+	public OrderedGroupedQueriable<T> orderBy(ItemFunc<Group<T>, Comparable> func) {
+		throwIfArgumentIsNull(func);
+		
+		return new OrderedGroupedQueriableImpl<T>(containedIter, func, SortOrder.Ascending);
+	}
+	
+	@Override
+	public OrderedGroupedQueriable<T> orderByDescending(ItemFunc<Group<T>, Comparable> func) {
+		throwIfArgumentIsNull(func);
+		
+		return new OrderedGroupedQueriableImpl<T>(containedIter, func, SortOrder.Descending);		
 	}
 }

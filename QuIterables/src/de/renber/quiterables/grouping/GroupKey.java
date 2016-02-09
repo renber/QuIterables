@@ -115,4 +115,13 @@ public class GroupKey {
 		return elements[index];
 	}
 
+	/**
+	 * Returns the first key part of this GroupKey
+	 * (use get(...) to receive the other parts)
+	 * Internally calls get(0)	 
+	 */
+	public Object first() {
+		return elements[0];
+	}
+	
 }

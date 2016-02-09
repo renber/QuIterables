@@ -52,6 +52,4 @@ class OrderedQueriableImpl<T> extends QueriableImpl<T> implements OrderedQueriab
 		getOrderIterable().addSecondaryOrderFunction(func, SortOrder.Descending);
 		return this;
 	}
-
-	
 }

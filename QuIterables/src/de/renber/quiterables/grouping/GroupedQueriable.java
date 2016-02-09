@@ -28,6 +28,11 @@ package de.renber.quiterables.grouping;
 import java.util.List;
 import java.util.Map;
 
+import de.renber.quiterables.Equivalence;
+import de.renber.quiterables.ItemFunc;
+import de.renber.quiterables.OrderedGroupedQueriable;
+import de.renber.quiterables.OrderedQueriable;
+import de.renber.quiterables.Predicate;
 import de.renber.quiterables.Queriable;
 
 /**
@@ -54,4 +59,62 @@ public interface GroupedQueriable<T> extends Queriable<Group<T>> {
 	 * the group's items
 	 */
 	public Map<GroupKey, Iterable<T>> toMap();
+	
+	// ---
+	// override return type of Queriable funtctions to GroupedQueriable for convenience
+	// ---
+	
+	@Override
+	public GroupedQueriable<T> where(Predicate<Group<T>> predicate);	
+	
+	@Override
+	public GroupedQueriable<T> defaultIfEmpty(Group<T> defaultValue);
+
+	@Override
+	public GroupedQueriable<T> concat(Iterable<Group<T>> toConcat);
+
+	@Override
+	public GroupedQueriable<T> union(Iterable<Group<T>> toConcat);
+
+	@Override
+	public GroupedQueriable<T> union(Iterable<Group<T>> toConcat, Equivalence<Group<T>> equalityComparer);
+
+	@Override
+	public GroupedQueriable<T> intersect(Iterable<Group<T>> intersectWith);
+
+	@Override
+	public GroupedQueriable<T> intersect(Iterable<Group<T>> intersectWith, Equivalence<Group<T>> equalityComparer);
+
+	@Override
+	public GroupedQueriable<T> except(Iterable<Group<T>> elementsToSubtract);
+
+	@Override
+	public GroupedQueriable<T> except(Iterable<Group<T>> elementsToSubtract, Equivalence<Group<T>> equalityComparer);	
+
+	@Override
+	public GroupedQueriable<T> distinct();
+
+	@Override
+	public GroupedQueriable<T> distinct(Equivalence<Group<T>> equalityComparer);	
+
+	@Override
+	public GroupedQueriable<T> take(int amount);
+
+	@Override
+	public GroupedQueriable<T> takeWhile(Predicate<Group<T>> condition);	
+
+	@Override
+	public GroupedQueriable<T> skip(int amount);
+
+	@Override
+	public GroupedQueriable<T> skipWhile(Predicate<Group<T>> condition);
+
+	@Override
+	public GroupedQueriable<T> reverse();
+	
+	@Override
+	public OrderedGroupedQueriable<T> orderBy(ItemFunc<Group<T>, Comparable> func);
+	
+	@Override
+	public OrderedGroupedQueriable<T> orderByDescending(ItemFunc<Group<T>, Comparable> func);	
 }
