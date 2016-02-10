@@ -1,5 +1,7 @@
 package de.renber.quiterables;
 
+import java.util.Comparator;
+
 import de.renber.quiterables.grouping.Group;
 import de.renber.quiterables.grouping.GroupedQueriable;
 
@@ -16,5 +18,11 @@ public interface OrderedGroupedQueriable<T> extends OrderedQueriable<Group<T>>, 
 	public OrderedGroupedQueriable<T> thenBy(ItemFunc<Group<T>, Comparable> func);
 	
 	@Override
-	public OrderedGroupedQueriable<T> thenByDescending(ItemFunc<Group<T>, Comparable> func);	
+	public <TComparable> OrderedGroupedQueriable<T> thenBy(ItemFunc<Group<T>, TComparable> valueFunc, Comparator<TComparable> comparator);
+	
+	@Override
+	public OrderedGroupedQueriable<T> thenByDescending(ItemFunc<Group<T>, Comparable> func);
+	
+	@Override
+	public <TComparable> OrderedGroupedQueriable<T> thenByDescending(ItemFunc<Group<T>, TComparable> valueFunc, Comparator<TComparable> comparator);
 }

@@ -29,6 +29,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -752,11 +753,25 @@ class QueriableImpl<T> implements Queriable<T> {
 	}
 	
 	@Override
+	public <TComparable> OrderedQueriable<T> orderBy(ItemFunc<T, TComparable> valueFunc, Comparator<TComparable> comparator) {
+		throwIfArgumentIsNull(comparator);
+				
+		return new OrderedQueriableImpl<T>(containedIter, valueFunc, comparator, SortOrder.Ascending);
+	}	
+	
+	@Override
 	public OrderedQueriable<T> orderByDescending(ItemFunc<T, Comparable> func) {
 		throwIfArgumentIsNull(func);
 		
 		return new OrderedQueriableImpl<T>(containedIter, func, SortOrder.Descending);			
 	}
+	
+	@Override
+	public <TComparable> OrderedQueriable<T> orderByDescending(ItemFunc<T, TComparable> valueFunc, Comparator<TComparable> comparator) {
+		throwIfArgumentIsNull(comparator);
+				
+		return new OrderedQueriableImpl<T>(containedIter, valueFunc, comparator, SortOrder.Descending);
+	}		
 	
 	@Override
 	public Queriable<T> reverse() {

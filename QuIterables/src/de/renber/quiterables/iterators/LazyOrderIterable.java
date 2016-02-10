@@ -43,27 +43,46 @@ import de.renber.quiterables.SortOrder;
  * @param <T>
  */
 @SuppressWarnings("unchecked")
-public class LazyOrderIterable<T> implements Iterable<T> {
+public class LazyOrderIterable<T, TComparable> implements Iterable<T> {
 
 	Iterable<T> wrapped;		
-	List<OrderFunc<T>> orderFuncs;
+	List<OrderFunc> orderFuncs;
 
 	List<T> sortedList;
+	
+	static final NaturalComparator defaultComparator = new NaturalComparator();
 
-	public LazyOrderIterable(Iterable<T> _wrapped, ItemFunc<T, Comparable> _orderFunc, SortOrder sortOrder) {
-		wrapped = _wrapped;
-		
-		orderFuncs = new ArrayList<OrderFunc<T>>();
-		orderFuncs.add(new OrderFunc<T>(_orderFunc, sortOrder));
+	public <TComparable> LazyOrderIterable(Iterable<T> _wrapped, ItemFunc<T, TComparable> valueFunc, Comparator comparator, SortOrder sortOrder) {
+		wrapped = _wrapped;		
+		orderFuncs = new ArrayList<OrderFunc>();
+		orderFuncs.add(new OrderFunc(valueFunc, comparator, sortOrder));
 	}	
+	
+	/**
+	 * Creates a LazyOrderIterable which uses the default Comparator
+	 * @param _wrapped
+	 * @param valueFunc
+	 * @param sortOrder
+	 */
+	public LazyOrderIterable(Iterable<T> _wrapped, ItemFunc<T, Comparable> valueFunc, SortOrder sortOrder) {
+		this(_wrapped, valueFunc, defaultComparator, sortOrder);
+	}		
 	
 	/**
 	 * Add a secondary ordering function which is used to compare elements
 	 * for which all previous ordering functions return "equal"	 
 	 */
 	public void addSecondaryOrderFunction(ItemFunc<T, Comparable> func, SortOrder sortOrder) {
-		orderFuncs.add(new OrderFunc<T>(func, sortOrder));
+		orderFuncs.add(new OrderFunc(func, defaultComparator, sortOrder));
 	}
+	
+	/**
+	 * Add a secondary ordering function which is used to compare elements
+	 * for which all previous ordering functions return "equal"	 
+	 */
+	public <TComparable> void addSecondaryOrderFunction(ItemFunc<T, TComparable> func, Comparator<TComparable> comparator, SortOrder sortOrder) {
+		orderFuncs.add(new OrderFunc(func, comparator, sortOrder));
+	}	
 
 	@Override
 	public Iterator<T> iterator() {
@@ -83,12 +102,14 @@ public class LazyOrderIterable<T> implements Iterable<T> {
 					int result = 0;
 					
 					for(OrderFunc f: orderFuncs) {
-						Comparable c1 = (Comparable)f.func.exec(item1);
-						Comparable c2 = (Comparable)f.func.exec(item2);
 						
-						result = c1.compareTo(c2);												
+						result = f.compare(item1, item2);
+																	
 						if (result != 0)
-							return f.sortOrder == SortOrder.Ascending ? result : -result;
+							return result;
+
+						// if the to elements are considered equal
+						// continue with the next order func
 					}
 					
 					return result;
@@ -97,20 +118,44 @@ public class LazyOrderIterable<T> implements Iterable<T> {
 		}
 
 		return sortedList.iterator();
-	}
+	}	
+}
 
-	/**
-	 * Holds an order function and the requested sort order
-	 * @author René Bergelt	 
-	 */
-	class OrderFunc<T> {
-		public ItemFunc<T, Comparable> func;
-		public SortOrder sortOrder; 
-		
-		public OrderFunc(ItemFunc<T, Comparable> _func, SortOrder _sortOrder) {
-			func = _func;
-			sortOrder = _sortOrder;
-		}
+/**
+ * Holds an order function and the requested sort order
+ * @author René Bergelt	 
+ */
+class OrderFunc<T, TComparable> {
+	public ItemFunc<T, TComparable> func;
+	// the comparator to use, when comparing the values returned by the given ItemFunc
+	public Comparator comparator;
+	public SortOrder sortOrder; 
+	
+	public OrderFunc(ItemFunc<T, TComparable> _func, Comparator _comparator, SortOrder _sortOrder) {
+		func = _func;
+		sortOrder = _sortOrder;
+		comparator = _comparator;
 	}
 	
+	/**
+	 * Compare the two elements with this order func
+	 * @param element1
+	 * @param element2
+	 * @return
+	 */
+	public int compare(T element1, T element2) {			
+		int result = comparator.compare(func.exec(element1), func.exec(element2));															
+		return sortOrder == SortOrder.Ascending ? result : -result;
+	}
+}
+
+/**
+ * The default comparator used by the LazyOrderIterable	 
+ */
+class NaturalComparator implements Comparator
+{
+	@Override
+	public int compare(Object o1, Object o2) {			
+		return ((Comparable)o1).compareTo((Comparable)o2);
+	}		
 }

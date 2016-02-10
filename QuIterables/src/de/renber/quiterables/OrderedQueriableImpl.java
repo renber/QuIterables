@@ -25,6 +25,9 @@
  *******************************************************************************/
 package de.renber.quiterables;
 
+import java.util.Comparator;
+
+import de.renber.quiterables.grouping.Group;
 import de.renber.quiterables.iterators.LazyOrderIterable;
 
 /**
@@ -33,12 +36,16 @@ import de.renber.quiterables.iterators.LazyOrderIterable;
  */
 class OrderedQueriableImpl<T> extends QueriableImpl<T> implements OrderedQueriable<T> {
 
-	protected LazyOrderIterable<T> getOrderIterable() {
-		return (LazyOrderIterable<T>)containedIter;
+	protected LazyOrderIterable getOrderIterable() {
+		return (LazyOrderIterable)containedIter;
 	}
 	
-	protected OrderedQueriableImpl(Iterable<T> forIterable, ItemFunc<T, Comparable> func, SortOrder sortOrder) {
-		super(new LazyOrderIterable<T>(forIterable, func, sortOrder));
+	protected OrderedQueriableImpl(Iterable<T> forIterable, ItemFunc<T, Comparable> valueFunc, SortOrder sortOrder) {
+		super(new LazyOrderIterable<T, Comparable>(forIterable, valueFunc, sortOrder));
+	}
+	
+	protected <TComparable> OrderedQueriableImpl(Iterable<T> forIterable, ItemFunc<T, TComparable> valueFunc, Comparator<TComparable> comparator, SortOrder sortOrder) {
+		super(new LazyOrderIterable(forIterable, valueFunc, comparator, sortOrder));
 	}
 	
 	@Override
@@ -48,8 +55,20 @@ class OrderedQueriableImpl<T> extends QueriableImpl<T> implements OrderedQueriab
 	}
 	
 	@Override
+	public <TComparable> OrderedQueriableImpl<T> thenBy(ItemFunc<T, TComparable> valueFunc, Comparator<TComparable> comparator) {
+		getOrderIterable().addSecondaryOrderFunction(valueFunc, comparator, SortOrder.Ascending);
+		return this;
+	}
+	
+	@Override
 	public OrderedQueriable<T> thenByDescending(ItemFunc<T, Comparable> func) {
 		getOrderIterable().addSecondaryOrderFunction(func, SortOrder.Descending);
+		return this;
+	}
+	
+	@Override
+	public <TComparable> OrderedQueriableImpl<T> thenByDescending(ItemFunc<T, TComparable> valueFunc, Comparator<TComparable> comparator) {
+		getOrderIterable().addSecondaryOrderFunction(valueFunc, comparator, SortOrder.Descending);
 		return this;
 	}
 }

@@ -25,6 +25,8 @@
  *******************************************************************************/
 package de.renber.quiterables;
 
+import java.util.Comparator;
+
 /**
  * Represents a Queriable which has been ordered
  * @author berre
@@ -38,7 +40,17 @@ public interface OrderedQueriable<T> extends Queriable<T> {
 	public OrderedQueriable<T> thenBy(ItemFunc<T, Comparable> func);
 	
 	/**
-	 * Define a secondary ordering criterion	
+	 * Define a secondary ordering criterion using the given Comparator
+	 */
+	public <TComparable> OrderedQueriable<T> thenBy(ItemFunc<T, TComparable> valueFunc, Comparator<TComparable> comparator);
+	
+	/**
+	 * Define a secondary ordering criterion (descending)	
 	 */
 	public OrderedQueriable<T> thenByDescending(ItemFunc<T, Comparable> func);
+	
+	/**
+	 * Define a secondary ordering criterion using the given Comparator (descending)
+	 */
+	public <TComparable> OrderedQueriable<T> thenByDescending(ItemFunc<T, TComparable> valueFunc, Comparator<TComparable> comparator);
 }

@@ -25,6 +25,7 @@
  *******************************************************************************/
 package de.renber.quiterables;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -403,16 +404,30 @@ public interface Queriable<T> extends Iterable<T> {
 	public GroupedQueriable<T> groupSingle(SingleKeyGroupFunction<T> func);	
 	
 	/**
-	 * Order the elements of this enumeration according	the values
+	 * Order the elements of this enumeration according to	the values
 	 * returned by the order function
 	 */
 	public OrderedQueriable<T> orderBy(ItemFunc<T, Comparable> func);
+	
+	/**
+	 * Order the elements of this enumeration according to the values
+	 * returned by the value function function using the given comparator
+	 * @param comparator	 
+	 */
+	public <TComparable> OrderedQueriable<T> orderBy(ItemFunc<T, TComparable> valueFunc, Comparator<TComparable> comparator);
 	
 	/**
 	 * Order the elements of this enumeration according	the values
 	 * returned by the order function in descending order
 	 */
 	public OrderedQueriable<T> orderByDescending(ItemFunc<T, Comparable> func);
+	
+	/**
+	 * Order the elements of this enumeration according to the values
+	 * returned by the value function function using the given comparator in descending order
+	 * @param comparator	 
+	 */
+	public <TComparable> OrderedQueriable<T> orderByDescending(ItemFunc<T, TComparable> valueFunc, Comparator<TComparable> comparator);
 	
 	/**
 	 * Reverse the order of elements of this enumeration	 

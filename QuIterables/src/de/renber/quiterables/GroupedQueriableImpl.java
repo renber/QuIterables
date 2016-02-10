@@ -26,6 +26,7 @@
 package de.renber.quiterables;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,28 +46,32 @@ import de.renber.quiterables.grouping.GroupedQueriable;
  */
 class GroupedQueriableImpl<T> extends QueriableImpl<Group<T>> implements GroupedQueriable<T> {
 
-	protected GroupedList<T> getGroupedList() {
-		return (GroupedList<T>) containedIter;
-	}
-
-	public GroupedQueriableImpl(GroupedList<T> groupedList) {
-		super(groupedList);
+	protected Iterable<Group<T>> getGroupedIter() {
+		return (Iterable<Group<T>>) containedIter;
 	}
 	
 	public GroupedQueriableImpl(Iterable<Group<T>> sequenceOfGroups) {
-		super(new GroupedListImpl<T>(sequenceOfGroups));
+		super(sequenceOfGroups);
 	}		
 
 	@Override
 	public Queriable<T> get(GroupKey key) {
-		Group<T> g = getGroupedList().get(key);
+		Group<T> g = null;
+		for(Group<T> element: getGroupedIter()) {
+			if (element.getKey().equals(key))
+			{
+				g = element;
+				break;
+			}
+		}			
 		return g == null ? null : new QueriableImpl<T>(g);
 	}
 
 	@Override
 	public GroupedList<T> toList() {
 		GroupedList<T> gl = new GroupedListImpl<T>();
-		gl.addAll(getGroupedList());
+		for(Group g: getGroupedIter())
+			gl.add(g);
 		return gl;
 	}
 
@@ -174,9 +179,23 @@ class GroupedQueriableImpl<T> extends QueriableImpl<Group<T>> implements Grouped
 	}
 	
 	@Override
+	public <TComparable> OrderedGroupedQueriable<T> orderBy(ItemFunc<Group<T>, TComparable> valueFunc, Comparator<TComparable> comparator) {
+		throwIfArgumentIsNull(valueFunc, comparator);
+		
+		return new OrderedGroupedQueriableImpl<T>(containedIter, valueFunc, comparator, SortOrder.Ascending);
+	}
+	
+	@Override
 	public OrderedGroupedQueriable<T> orderByDescending(ItemFunc<Group<T>, Comparable> func) {
 		throwIfArgumentIsNull(func);
 		
 		return new OrderedGroupedQueriableImpl<T>(containedIter, func, SortOrder.Descending);		
+	}
+	
+	@Override
+	public <TComparable> OrderedGroupedQueriable<T> orderByDescending(ItemFunc<Group<T>, TComparable> valueFunc, Comparator<TComparable> comparator) {
+		throwIfArgumentIsNull(valueFunc);
+		
+		return new OrderedGroupedQueriableImpl<T>(containedIter, valueFunc, comparator, SortOrder.Descending);
 	}
 }
