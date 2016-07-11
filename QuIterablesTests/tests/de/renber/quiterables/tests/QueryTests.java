@@ -15,6 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.renber.quiterables.Equivalence;
+import de.renber.quiterables.QuIterables;
 import de.renber.quiterables.Queriable;
 import de.renber.quiterables.Query;
 
@@ -448,6 +449,11 @@ public class QueryTests {
 		// test version with parameters
 		assertEquals(4, Query.list(sampleData).max(x -> x.numberItem));
 	}
+	
+	@Test
+	public void test_empty_max() {
+		testForException(IllegalStateException.class, () -> QuIterables.empty().max());
+	}
 
 	@Test
 	public void test_min() {
@@ -460,18 +466,41 @@ public class QueryTests {
 	}
 	
 	@Test
+	public void test_empty_min() {
+		testForException(IllegalStateException.class, () -> QuIterables.empty().min());
+	}
+	
+	@Test
 	public void test_average() {
-		int[] numbers = new int[] { 2, 4, 4, 6 };
-		double avg = Query.array(numbers).average(x -> x).doubleValue();
+		int[] numbers = new int[] { 2, 4, 3, 6 };
+		double avg = Query.array(numbers).average().doubleValue();
 
-		assertEquals(4d, avg, 0.000001);
+		assertEquals(3.75d, avg, 0.000001);
+	}
+	
+	@Test
+	public void test_empty_average() {
+		testForException(IllegalStateException.class, () -> QuIterables.empty().average());
 	}
 
 	@Test
-	public void test_sum() {
+	public void test_sum_pojo() {
 		Number sum = Query.list(sampleData).sum(x -> x.numberItem);
 
 		assertEquals(17, sum);
+	}
+	
+	@Test
+	public void test_sum() {
+		int[] numbers = new int[] { 2, 4, 4, 6 };
+		Number sum = Query.array(numbers).sum();
+
+		assertEquals(16, sum);
+	}
+	
+	@Test
+	public void test_empty_sum() {
+		assertEquals(0, QuIterables.empty().sum());
 	}
 
 	@Test
