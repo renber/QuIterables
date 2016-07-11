@@ -3,7 +3,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 René Bergelt
+ * Copyright (c) 2015-2016 René Bergelt
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,6 +28,8 @@ package de.renber.quiterables;
 import de.renber.quiterables.grouping.GroupedList;
 import de.renber.quiterables.grouping.GroupedQueriable;
 import de.renber.quiterables.iterators.ArrayIterable;
+import de.renber.quiterables.iterators.EmptyIterable;
+import de.renber.quiterables.iterators.RangeIterable;
 import de.renber.quiterables.iterators.primitivetypes.BooleanArrayIterable;
 import de.renber.quiterables.iterators.primitivetypes.ByteArrayIterable;
 import de.renber.quiterables.iterators.primitivetypes.CharArrayIterable;
@@ -36,6 +38,7 @@ import de.renber.quiterables.iterators.primitivetypes.FloatArrayIterable;
 import de.renber.quiterables.iterators.primitivetypes.IntArrayIterable;
 import de.renber.quiterables.iterators.primitivetypes.LongArrayIterable;
 import de.renber.quiterables.iterators.primitivetypes.ShortArrayIterable;
+import de.renber.quiterables.iterators.EmptyIterable;
 
 /**
  * Convenience class of the QuIterables library 
@@ -129,4 +132,17 @@ public class QuIterables {
 		return new QueriableImpl<Character>(new CharArrayIterable(array));
 	}	
 	
+	/**
+	 * Returns a Queriable which doe snot contain any elements	 
+	 */
+	public static <T> Queriable<T> empty() {
+		return new QueriableImpl<T>(EmptyIterable.getInstance());
+	}
+	
+	/**
+	 * Returns a Queriable which contains the numbers starting at start until end (inclusive, i.e. [start, end])	 
+	 */
+	public static Queriable<Integer> range(int start, int end) {
+		return new QueriableImpl<Integer>(new RangeIterable(start, end));
+	}
 }

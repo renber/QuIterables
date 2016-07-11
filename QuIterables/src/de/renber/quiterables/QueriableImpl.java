@@ -3,7 +3,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 René Bergelt
+ * Copyright (c) 2015-2016 René Bergelt
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -425,9 +425,13 @@ class QueriableImpl<T> implements Queriable<T> {
 	}
 
 	@Override
-	public T max() {				
+	public T max() {						
+		if (isEmpty())
+			// the enumeration is empty
+			throw new IllegalStateException("The iteration has no elements.");
+		
 		T max = null;
-
+		
 		for (T item : containedIter) {
 			// this only works if the valFunc always returns the same type of
 			// number (i.e. only Integer, only Double, etc.) or types which are
@@ -450,8 +454,12 @@ class QueriableImpl<T> implements Queriable<T> {
 	public Number max(NumberFunc<T> valFunc) {
 		throwIfArgumentIsNull(valFunc);
 		
-		Number max = null;
+		if (isEmpty())
+			// the enumeration is empty
+			throw new IllegalStateException("The iteration has no elements.");
 
+		Number max = null;		
+		
 		for (T item : containedIter) {
 			Number c = valFunc.getValue(item);
 			// this only works if the valFunc always returns the same type of
@@ -472,7 +480,11 @@ class QueriableImpl<T> implements Queriable<T> {
 	}
 	
 	@Override
-	public T min() {				
+	public T min() {						
+		if (isEmpty())
+			// the enumeration is empty
+			throw new IllegalStateException("The iteration has no elements.");
+		
 		T min = null;
 
 		for (T item : containedIter) {
@@ -493,7 +505,11 @@ class QueriableImpl<T> implements Queriable<T> {
 
 	@Override
 	public Number min(NumberFunc<T> valFunc) {
-		throwIfArgumentIsNull(valFunc);
+		throwIfArgumentIsNull(valFunc);		
+		
+		if (isEmpty())
+			// the enumeration is empty
+			throw new IllegalStateException("The iteration has no elements.");
 		
 		Number min = null;
 
@@ -516,8 +532,17 @@ class QueriableImpl<T> implements Queriable<T> {
 	}
 	
 	@Override
+	public Number average() {		
+		return average(new SimpleCastNumberFunc<T>());
+	}
+	
+	@Override
 	public Number average(NumberFunc<T> valFunc) {
 		throwIfArgumentIsNull(valFunc);
+		
+		if (isEmpty())
+			// the enumeration is empty
+			throw new IllegalStateException("The iteration has no elements.");
 		
 		Double avg = null;
 		int count = 0;
@@ -537,13 +562,16 @@ class QueriableImpl<T> implements Queriable<T> {
 		return avg;
 	}
 
+	@Override
+	public Number sum() {
+		return sum(new SimpleCastNumberFunc<T>());
+	}
 	
 	@Override
 	public Number sum(NumberFunc<T> valFunc) {
-		throwIfArgumentIsNull(valFunc);
+		throwIfArgumentIsNull(valFunc);				
 		
 		Number sum = null;
-
 		for (T item : containedIter) {
 
 			//
@@ -834,5 +862,18 @@ class QueriableImpl<T> implements Queriable<T> {
 	@Override
 	public Iterator<T> iterator() {
 		return containedIter.iterator();
+	}
+	
+	/**
+	 * Class which implements NumberFunc and just tries to
+	 * cast the given elements to Number
+	 * @author René Bergelt	 
+	 */
+	class SimpleCastNumberFunc<TNumber> implements NumberFunc<TNumber>
+	{
+		@Override
+		public Number getValue(TNumber item) {
+			return (Number)item;
+		}		
 	}
 }

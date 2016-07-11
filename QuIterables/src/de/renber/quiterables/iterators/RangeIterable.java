@@ -23,48 +23,60 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *******************************************************************************/
-package de.renber.quiterables.iterators.primitivetypes;
+package de.renber.quiterables.iterators;
 
 import java.util.Iterator;
-
-import de.renber.quiterables.iterators.LazyIterator;
+import java.util.NoSuchElementException;
 
 /**
- * An Iterable wrapper for primitive-type double-arrays
+ * An Iterable implementation which returns a range of integer numbers
  * @author René Bergelt
- *
  */
-public class DoubleArrayIterable implements Iterable<Double> {
-
-	double[] wrapped;
+public class RangeIterable implements Iterable<Integer> {	
 	
-	public DoubleArrayIterable(double[] array) {
-		wrapped = array;
-	}
+	int start;
+	int end;
 	
-	@Override
-	public Iterator<Double> iterator() {
-		return new DoubleArrayIterator(wrapped);
-	}
-}
-
-class DoubleArrayIterator extends LazyIterator<Double>
-{
-	double[] wrapped;
-	int currentIndex = 0;
-	
-	public DoubleArrayIterator(double[] array) {
-		wrapped = array;
-	}
-	
-	@Override
-	protected Double findNextElement() {
-		if (wrapped == null || currentIndex >= wrapped.length)
-			return null;
+	/**
+	 * Creates an instance of the RangeIterable which contains the numbers starting at start until end (inclusive, i.e. [start, end])	 
+	 */
+	public RangeIterable(int start, int end) {
+		if (end < start)
+			throw new IllegalArgumentException("Parameter end must be large ror equal to start.");
 		
-		Double element = wrapped[currentIndex];
-		currentIndex++;
-		return element;
+		this.start = start;
+		this.end = end;
+	}
+
+	@Override
+	public Iterator<Integer> iterator() {
+		return new RangeIterator(start, end);
 	}	
 }
 
+class RangeIterator implements Iterator<Integer> {
+
+	int current;
+	int end;
+	
+	public RangeIterator(int start, int end) {
+		current = start;
+		this.end = end;
+	}
+	
+	@Override
+	public boolean hasNext() {
+		return current <= end;
+	}
+
+	@Override
+	public Integer next() {
+		if (current > end)
+			throw new NoSuchElementException("No more elements in iterator. Use hasNext() to check before calling next().");
+		
+		int ret = current;
+		current++;
+		return ret;
+	}
+	
+}

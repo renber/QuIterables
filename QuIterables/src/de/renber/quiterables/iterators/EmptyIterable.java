@@ -23,48 +23,53 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *******************************************************************************/
-package de.renber.quiterables.iterators.primitivetypes;
+package de.renber.quiterables.iterators;
 
 import java.util.Iterator;
-
-import de.renber.quiterables.iterators.LazyIterator;
+import java.util.NoSuchElementException;
 
 /**
- * An Iterable wrapper for primitive-type double-arrays
+ * An iterable implementation which cotnains no elements
  * @author René Bergelt
- *
  */
-public class DoubleArrayIterable implements Iterable<Double> {
-
-	double[] wrapped;
+@SuppressWarnings("rawtypes")
+public class EmptyIterable<T> implements Iterable<T> {
 	
-	public DoubleArrayIterable(double[] array) {
-		wrapped = array;
-	}
+	// at runtime there only exists one empty iterable instance
+	// even if the user uses more empty iterables 
+	private static EmptyIterable instance = new EmptyIterable();
 	
-	@Override
-	public Iterator<Double> iterator() {
-		return new DoubleArrayIterator(wrapped);
-	}
-}
-
-class DoubleArrayIterator extends LazyIterator<Double>
-{
-	double[] wrapped;
-	int currentIndex = 0;
+	// we use the same iterator instance for all EmptyIterable instance	
+	static EmptyIterator it = new EmptyIterator();
 	
-	public DoubleArrayIterator(double[] array) {
-		wrapped = array;
-	}
-	
-	@Override
-	protected Double findNextElement() {
-		if (wrapped == null || currentIndex >= wrapped.length)
-			return null;
-		
-		Double element = wrapped[currentIndex];
-		currentIndex++;
-		return element;
+	private EmptyIterable() {
+		// --
 	}	
-}
+	
+	/**
+	 * Return an instance of the EmptyIterable class
+	 * (Internally always uses the same instance)	 
+	 */
+	public static EmptyIterable getInstance() {
+		return instance;
+	}	
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Iterator<T> iterator() {	
+		return it;
+	}
+	
+	static class EmptyIterator<T> implements Iterator<T> {
 
+		@Override
+		public boolean hasNext() {
+			return false;
+		}
+
+		@Override
+		public T next() {
+			throw new NoSuchElementException("No more elements in iterator. Use hasNext() to check before calling next().");
+		}		
+	}
+}

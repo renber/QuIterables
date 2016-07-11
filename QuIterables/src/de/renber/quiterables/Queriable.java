@@ -3,7 +3,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 René Bergelt
+ * Copyright (c) 2015-2016 René Bergelt
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -217,6 +217,7 @@ public interface Queriable<T> extends Iterable<T> {
     /**
      * Returns the maximum element of the enumeration
      * (Elements have to implement Comparable)     
+     * @throws IllegalStateException if there are no elements
      */
     public T max();
     
@@ -226,12 +227,14 @@ public interface Queriable<T> extends Iterable<T> {
      * @param valFunc The function to calculate the value which shall be maximized for a single list item, the return value
      * must always be of a single type (so for one list all return values for instance have to be either integers or doubles, but mixing is not possible)
      * @return the maximum value or null if the list is empty
+     * @throws IllegalStateException if there are no elements
      */
 	public Number max(NumberFunc<T> valFunc);
     
 	/**
      * Returns the minimum element of the enumeration
      * (Elements have to implement Comparable)     
+     * @throws IllegalStateException if there are no elements
      */
 	public T min();
 	
@@ -241,19 +244,36 @@ public interface Queriable<T> extends Iterable<T> {
      * @param list The list to retrieve the minimum from
      * @param valFunc The function to calculate the value which shall be minimized for a single list item, the return value
      * must always be of a single type (so for one list all return values for instance have to be either integers or doubles, but mixing is not possible)
-     * @return the minimum value or null if the list is empty
+     * @return the minimum value
+     * @throws IllegalStateException if there are no elements
      */	
 	public Number min(NumberFunc<T> valFunc);
+	
+	/**
+     * Return the average from the enumeration
+     * (Elements will be cast to java.lang.Number) 
+     * @return the average value
+     * @throws IllegalStateException if there are no elements
+     */	
+	public Number average();
 	
 	/**
      * Return the average from the enumeration where the value for each item
      * is calculated by the given function     
      * @param valFunc The function to calculate the values which shall be averagem, the return value
      * must always be of a single type (so for one list all return values for instance have to be either integers or doubles, but mixing is not possible)
-     * @return the average or null if the list is empty
+     * @return the average value
+     * @throws IllegalStateException if there are no elements
      */	
 	public Number average(NumberFunc<T> valFunc);
     
+	/**
+     * Return the sum from the enumeration where the value for each item
+	 * (Elements will be cast to java.lang.Number) 
+     * @return the sum or 0 (integer zero) if the list is empty
+     */	
+	public Number sum();
+	
     /**
      * Return the sum from the enumeration where the value for each item
      * is calculated by the given function     
