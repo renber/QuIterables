@@ -13,6 +13,9 @@ But there are also enough differences to consider QuIterable useful:
 QuIterables tries to lazy-evaluate your expressions as much as possible, so expression evaluation can be deferred up to the point where you actually request an item or
 final result. In contrast to other Java query libraries it is fully type-safe.
 
+This repository ist automatically built and tested with Travis CI:<br/>
+![build status](https://api.travis-ci.org/renber/QuIterables.svg?branch=master)
+
 # Usage
 
 All samples are using the (more readable) Java 8 lambda syntax. Below Java 8 you have to resort to implementing the required interfaces which all only have one method (e.g. anonymous implementation in-place).
