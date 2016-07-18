@@ -56,7 +56,7 @@ class PrimitiveArrayTransformerImpl<T> implements PrimitiveArrayTransformer<T> {
 		
 		for(int i = 0; i < array.length && it.hasNext(); i++) {
 			T v = it.next();
-			array[i] = (int)v;
+			array[i] = ((Number)v).intValue();
 		}	
 		
 		return array;
@@ -69,8 +69,8 @@ class PrimitiveArrayTransformerImpl<T> implements PrimitiveArrayTransformer<T> {
 		
 		for(int i = 0; i < array.length && it.hasNext(); i++) {
 			T v = it.next();
-			array[i] = (short)v;
-		}	
+			array[i] = ((Number)v).shortValue();
+		}				
 		
 		return array;
 	}
@@ -82,7 +82,7 @@ class PrimitiveArrayTransformerImpl<T> implements PrimitiveArrayTransformer<T> {
 		
 		for(int i = 0; i < array.length && it.hasNext(); i++) {
 			T v = it.next();
-			array[i] = (long)v;
+			array[i] = ((Number)v).longValue();
 		}	
 		
 		return array;
@@ -95,7 +95,7 @@ class PrimitiveArrayTransformerImpl<T> implements PrimitiveArrayTransformer<T> {
 		
 		for(int i = 0; i < array.length && it.hasNext(); i++) {
 			T v = it.next();
-			array[i] = (float)v;
+			array[i] = ((Number)v).floatValue();
 		}	
 		
 		return array;
@@ -108,7 +108,7 @@ class PrimitiveArrayTransformerImpl<T> implements PrimitiveArrayTransformer<T> {
 		
 		for(int i = 0; i < array.length && it.hasNext(); i++) {
 			T v = it.next();
-			array[i] = (double)v;
+			array[i] = ((Number)v).doubleValue();
 		}	
 		
 		return array;
@@ -121,7 +121,7 @@ class PrimitiveArrayTransformerImpl<T> implements PrimitiveArrayTransformer<T> {
 		
 		for(int i = 0; i < array.length && it.hasNext(); i++) {
 			T v = it.next();
-			array[i] = (byte)v;
+			array[i] = ((Number)v).byteValue();
 		}	
 		
 		return array;
@@ -134,7 +134,7 @@ class PrimitiveArrayTransformerImpl<T> implements PrimitiveArrayTransformer<T> {
 		
 		for(int i = 0; i < array.length && it.hasNext(); i++) {
 			T v = it.next();
-			array[i] = (boolean)v;
+			array[i] = (Boolean)v;
 		}	
 		
 		return array;
@@ -147,7 +147,7 @@ class PrimitiveArrayTransformerImpl<T> implements PrimitiveArrayTransformer<T> {
 		
 		for(int i = 0; i < array.length && it.hasNext(); i++) {
 			T v = it.next();
-			array[i] = (char)v;
+			array[i] = (Character)v;
 		}	
 		
 		return array;
