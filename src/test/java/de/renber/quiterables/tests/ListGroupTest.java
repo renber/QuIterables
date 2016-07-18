@@ -15,7 +15,7 @@ import de.renber.quiterables.grouping.GroupKey;
 import de.renber.quiterables.grouping.GroupedList;
 import de.renber.quiterables.grouping.GroupedQueriable;
 
-public class ListGroupTests {
+public class ListGroupTest {
 
 	List<TestPojo> sampleData;
 

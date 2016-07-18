@@ -25,7 +25,7 @@ import de.renber.quiterables.Query;
  * 
  * @author berre
  */
-public class QueryTests {
+public class QueryTest {
 
 	List<TestPojo> sampleData;
 

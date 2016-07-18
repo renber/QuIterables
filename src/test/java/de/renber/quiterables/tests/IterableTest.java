@@ -14,7 +14,7 @@ import de.renber.quiterables.iterators.RangeIterable;
  * Tests for the built-in Iterable convenience classes
  * @author René Bergelt
  */
-public class IterableTests {
+public class IterableTest {
 
 	@Test
 	public void test_EmptyIterable() {

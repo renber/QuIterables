@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import de.renber.quiterables.Query;
 
-public class PrimitiveTypeArrayTests {
+public class PrimitiveTypeArrayTest {
 
 	@Test
 	public void test_int_array() {		

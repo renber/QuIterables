@@ -14,7 +14,7 @@ import de.renber.quiterables.Query;
 import de.renber.quiterables.grouping.Group;
 import de.renber.quiterables.iterators.ListReverseIterable;
 
-public class OrderingTests {
+public class OrderingTest {
 
 	@Test
 	public void test_orderBy() {
