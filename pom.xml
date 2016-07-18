@@ -5,8 +5,7 @@
   <version>1.0.0-SNAPSHOT</version>
   <name>QuIterables</name>
   <description>Queriable iterables for java</description>
-  <build>
-    <sourceDirectory>src</sourceDirectory>
+  <build>    
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
