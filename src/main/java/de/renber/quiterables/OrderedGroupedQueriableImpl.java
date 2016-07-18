@@ -3,7 +3,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2015-2016 René Bergelt
+ * Copyright (c) 2015-2016 RenÃ© Bergelt
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,7 @@ import de.renber.quiterables.iterators.LazyOrderIterable;
  * The actual implementation of the OrderedGroupedQueriable<T> interface used in the
  * library
  * 
- * @author René Bergelt
+ * @author RenÃ© Bergelt
  *
  * @param <T>
  */

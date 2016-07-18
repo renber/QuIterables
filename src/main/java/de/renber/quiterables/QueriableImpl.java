@@ -3,7 +3,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2015-2016 René Bergelt
+ * Copyright (c) 2015-2016 RenÃ© Bergelt
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -56,7 +56,7 @@ import de.renber.quiterables.iterators.LazySelectManyIterable;
  * Actual Queriable<T> implementation used in this library and which is returned
  * by the Query methods
  * 
- * @author René Bergelt
+ * @author RenÃ© Bergelt
  *
  */
 class QueriableImpl<T> implements Queriable<T> {
@@ -867,7 +867,7 @@ class QueriableImpl<T> implements Queriable<T> {
 	/**
 	 * Class which implements NumberFunc and just tries to
 	 * cast the given elements to Number
-	 * @author René Bergelt	 
+	 * @author RenÃ© Bergelt	 
 	 */
 	class SimpleCastNumberFunc<TNumber> implements NumberFunc<TNumber>
 	{

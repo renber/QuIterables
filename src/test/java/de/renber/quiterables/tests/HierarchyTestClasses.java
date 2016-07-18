@@ -2,7 +2,7 @@ package de.renber.quiterables.tests;
 
 /**
  * Test classes for testing methods which interact with class hierarchies
- * @author René Bergelt
+ * @author RenÃ© Bergelt
  */
 
 class ParentTestClass {

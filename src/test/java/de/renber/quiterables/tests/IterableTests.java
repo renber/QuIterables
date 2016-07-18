@@ -12,7 +12,7 @@ import de.renber.quiterables.iterators.RangeIterable;
 
 /**
  * Tests for the built-in Iterable convenience classes
- * @author René Bergelt
+ * @author RenÃ© Bergelt
  */
 public class IterableTests {
 

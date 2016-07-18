@@ -3,7 +3,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2015-2016 René Bergelt
+ * Copyright (c) 2015-2016 RenÃ© Bergelt
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -39,7 +39,7 @@ import de.renber.quiterables.Query;
  * Iterable which returns the elements of a source iterable
  * but filters duplicates either by using the equals() method of
  * the objects or a custom equality comparer
- * @author René Bergelt 
+ * @author RenÃ© Bergelt 
  */
 public class LazyDistinctIterable<T> implements Iterable<T> {
 

@@ -3,7 +3,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2015-2016 René Bergelt
+ * Copyright (c) 2015-2016 RenÃ© Bergelt
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -32,7 +32,7 @@ import de.renber.quiterables.grouping.GroupedQueriable;
 
 /**
  * Represents a grouped Queriable which has been ordered
- * @author René Bergelt
+ * @author RenÃ© Bergelt
  */
 public interface OrderedGroupedQueriable<T> extends OrderedQueriable<Group<T>>, GroupedQueriable<T> {
 	

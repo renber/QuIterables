@@ -3,7 +3,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2015-2016 René Bergelt
+ * Copyright (c) 2015-2016 RenÃ© Bergelt
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,7 +31,7 @@ import de.renber.quiterables.iterators.LazyIterator;
 
 /**
  * An Iterable wrapper for primitive-type long-arrays
- * @author René Bergelt
+ * @author RenÃ© Bergelt
  *
  */
 public class LongArrayIterable implements Iterable<Long> {

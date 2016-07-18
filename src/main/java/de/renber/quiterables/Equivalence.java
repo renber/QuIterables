@@ -3,7 +3,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2015-2016 René Bergelt
+ * Copyright (c) 2015-2016 RenÃ© Bergelt
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +27,7 @@ package de.renber.quiterables;
 
 /**
  * Interface for functions which compare elements for equality
- * @author René Bergelt
+ * @author RenÃ© Bergelt
  */
 public interface Equivalence<T> {
 

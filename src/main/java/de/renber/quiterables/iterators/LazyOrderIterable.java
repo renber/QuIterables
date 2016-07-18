@@ -3,7 +3,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2015-2016 René Bergelt
+ * Copyright (c) 2015-2016 RenÃ© Bergelt
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -38,7 +38,7 @@ import de.renber.quiterables.SortOrder;
 /**
  * AN Iterable which sorts its elements before returning an iterator
  * 
- * @author René Bergelt
+ * @author RenÃ© Bergelt
  *
  * @param <T>
  */
@@ -123,7 +123,7 @@ public class LazyOrderIterable<T, TComparable> implements Iterable<T> {
 
 /**
  * Holds an order function and the requested sort order
- * @author René Bergelt	 
+ * @author RenÃ© Bergelt	 
  */
 class OrderFunc<T, TComparable> {
 	public ItemFunc<T, TComparable> func;
