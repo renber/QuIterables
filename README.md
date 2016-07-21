@@ -51,7 +51,7 @@ class TestPojo {
 
 List<TestPojo> list = Arrays.asList(new TestPojo[] {new TestPojo("One", 1), new TestPojo("Two", 2), new TestPojo("Three", 3)});
 TestPojo p1 = Query.list(list).where(x -> x.numberItem > 1).firstOrDefault(); // p1 is now TestPojo("Two", 2)
-TestPojo p2 = Query.list(list).skipWhile(x -> x < 2).count(); // p2 is now TestPojo("Three", 3)
+TestPojo p2 = Query.list(list).skipWhile(x -> x < 2); // p2 is now TestPojo("Three", 3)
 
 
 List<TestPojo> list2 = Arrays.asList(new TestPojo[] {new TestPojo("A very long entry", 1), new TestPojo("Short entry", 26), new TestPojo("Short entry", 11)});
