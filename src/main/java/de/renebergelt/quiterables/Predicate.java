@@ -29,6 +29,12 @@ package de.renebergelt.quiterables;
  * A predicate function needed for some Queriable methods
  * @author berre
  */
-public interface Predicate<T> { 
+public interface Predicate<T> {
+
+    /**
+     * Evaluate a condition fo rthe given element
+     * @param item The element to evaluate
+     * @return Result of the evaluation
+     */
     public boolean evaluate(T item);   
 }

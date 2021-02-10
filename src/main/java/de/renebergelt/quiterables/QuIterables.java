@@ -55,7 +55,10 @@ public class QuIterables {
 	}	
 	
 	/**
-	 * Return a queriable object for the given iterable	
+	 * Return a queriable object for the given iterable
+	 * @param it iterable to query
+	 * @param <T> Type of elements
+	 * @return Queriable object
 	 */
 	public static <T> Queriable<T> query(Iterable<T> it) {
 		return new QueriableImpl<T>(it);
@@ -63,13 +66,19 @@ public class QuIterables {
 	
 	/**
 	 * Return a grouped queriable for the given grouped list
+	 * @param groupedList GroupedList to query
+	 * @param <T> Type of elements
+	 * @return Queriable object
 	 */
 	public static <T> GroupedQueriable<T> query(GroupedList<T> groupedList) {
 		return new GroupedQueriableImpl<T>(groupedList);
 	}
 		
 	/**
-	 * Return a queriable object for the given iterable	
+	 * Return a queriable object for the given array
+	 * @param array array to query
+	 * @param <T> Type of elements
+	 * @return Queriable object
 	 */
 	public static <T> Queriable<T> query(T[] array) {
 		return new QueriableImpl<T>(new ArrayIterable<T>(array));
@@ -77,6 +86,8 @@ public class QuIterables {
 		
 	/**
 	 * Return a Queriable which wraps the given primitive-type int-array
+	 * @param array array to query
+	 * @return Queriable object
 	 */
 	public static Queriable<Integer> query(int[] array) {
 		return new QueriableImpl<Integer>(new IntArrayIterable(array));
@@ -84,6 +95,8 @@ public class QuIterables {
 	
 	/**
 	 * Return a Queriable which wraps the given primitive-type short-array
+	 * @param array array to query
+	 * @return Queriable object
 	 */
 	public static Queriable<Short> query(short[] array) {
 		return new QueriableImpl<Short>(new ShortArrayIterable(array));
@@ -91,6 +104,8 @@ public class QuIterables {
 
 	/**
 	 * Return a Queriable which wraps the given primitive-type long-array
+	 * @param array array to query
+	 * @return Queriable object
 	 */
 	public static Queriable<Long> query(long[] array) {
 		return new QueriableImpl<Long>(new LongArrayIterable(array));
@@ -98,6 +113,8 @@ public class QuIterables {
 	
 	/**
 	 * Return a Queriable which wraps the given primitive-type float-array
+	 * @param array array to query
+	 * @return Queriable object
 	 */
 	public static Queriable<Float> query(float[] array) {
 		return new QueriableImpl<Float>(new FloatArrayIterable(array));
@@ -105,6 +122,8 @@ public class QuIterables {
 	
 	/**
 	 * Return a Queriable which wraps the given primitive-type double-array
+	 * @param array array to query
+	 * @return Queriable object
 	 */
 	public static Queriable<Double> query(double[] array) {
 		return new QueriableImpl<Double>(new DoubleArrayIterable(array));
@@ -112,6 +131,8 @@ public class QuIterables {
 	
 	/**
 	 * Return a Queriable which wraps the given primitive-type byte-array
+	 * @param array array to query
+	 * @return Queriable object
 	 */
 	public static Queriable<Byte> query(byte[] array) {
 		return new QueriableImpl<Byte>(new ByteArrayIterable(array));
@@ -119,6 +140,8 @@ public class QuIterables {
 	
 	/**
 	 * Return a Queriable which wraps the given primitive-type boolean-array
+	 * @param array array to query
+	 * @return Queriable object
 	 */
 	public static Queriable<Boolean> query(boolean[] array) {
 		return new QueriableImpl<Boolean>(new BooleanArrayIterable(array));
@@ -126,20 +149,27 @@ public class QuIterables {
 	
 	/**
 	 * Return a Queriable which wraps the given primitive-type char-array
+	 * @param array array to query
+	 * @return Queriable object
 	 */
 	public static Queriable<Character> query(char[] array) {
 		return new QueriableImpl<Character>(new CharArrayIterable(array));
 	}	
 	
 	/**
-	 * Returns a Queriable which doe snot contain any elements	 
+	 * Returns a Queriable which does not contain any elements
+	 * @param <T> Type of elements
+	 * @return An empty queriable object
 	 */
 	public static <T> Queriable<T> empty() {
 		return new QueriableImpl<T>(EmptyIterable.getInstance());
 	}
 	
 	/**
-	 * Returns a Queriable which contains the numbers starting at start until end (inclusive, i.e. [start, end])	 
+	 * Returns a Queriable which contains the numbers starting at start until end (inclusive, i.e. [start, end])
+	 * @param start first number
+	 * @param end last number
+	 * @return queriable range
 	 */
 	public static Queriable<Integer> range(int start, int end) {
 		return new QueriableImpl<Integer>(new RangeIterable(start, end));

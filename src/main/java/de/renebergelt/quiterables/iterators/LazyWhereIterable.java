@@ -39,8 +39,13 @@ import de.renebergelt.quiterables.Predicate;
 public class LazyWhereIterable<T> implements Iterable<T> {
 
 	Iterable<T> wrapped;	
-	Predicate<T> predicate;	
-	
+	Predicate<T> predicate;
+
+	/**
+	 * Create a new lazy where iterable which wraps the given iterable
+	 * @param _wrapped The wrapped iterable
+	 * @param  _predicate Condition to include an element
+	 */
 	public LazyWhereIterable(Iterable<T> _wrapped, Predicate<T> _predicate) {
 		wrapped = _wrapped;
 		predicate = _predicate;

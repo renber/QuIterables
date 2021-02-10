@@ -37,7 +37,11 @@ import java.util.Iterator;
 public class ArrayIterable<T> implements Iterable<T> {
 
 	T[] wrapped;
-	
+
+	/**
+	 * Create a new iterable wrapper for the given array
+	 * @param array The array to wrap
+	 */
 	public ArrayIterable(T[] array) {
 		wrapped = array;
 	}

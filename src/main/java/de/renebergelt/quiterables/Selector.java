@@ -31,6 +31,11 @@ package de.renebergelt.quiterables;
  */
 public interface Selector<TIn, TOut> {
 
+	/**
+	 * Transforms item to the given output type
+	 * @param item The item to transform
+	 * @return Result of the transformation
+	 */
 	public TOut select(TIn item);
 	
 }

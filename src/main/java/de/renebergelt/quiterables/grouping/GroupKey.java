@@ -51,8 +51,8 @@ public class GroupKey {
 	 * Compares this group key to the given one for data (!) equality (not only
 	 * reference equality)
 	 * 
-	 * @param gk
-	 * @return
+	 * @param gk The group key to compare to
+	 * @return True if the keys are considered equal
 	 */
 	public boolean equals(GroupKey gk) {
 
@@ -97,9 +97,9 @@ public class GroupKey {
 	}
 
 	/**
-	 * Number of key parts this group key consists of
+	 * Return the number of key parts this group key consists of
 	 * 
-	 * @return
+	 * @return The number of key parts this group key consists of
 	 */
 	public int partCount() {
 		return elements.length;
@@ -108,8 +108,8 @@ public class GroupKey {
 	/**
 	 * Returns the key part with the given index
 	 * 
-	 * @param index
-	 * @return
+	 * @param index Index of the key part
+	 * @return The value of the key part at the given index
 	 */
 	public Object get(int index) {
 		return elements[index];
@@ -118,7 +118,8 @@ public class GroupKey {
 	/**
 	 * Returns the first key part of this GroupKey
 	 * (use get(...) to receive the other parts)
-	 * Internally calls get(0)	 
+	 * Internally calls get(0)
+	 * @return The first key part
 	 */
 	public Object first() {
 		return elements[0];

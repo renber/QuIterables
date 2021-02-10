@@ -31,6 +31,11 @@ package de.renebergelt.quiterables;
  */
 public interface ItemFunc<TArg, TRet> {
 
+	/**
+	 * Execute the ItemFunc and return the result
+	 * @param item Item to execute on
+	 * @return The result of execution
+	 */
 	public TRet exec(TArg item);
 	
 }

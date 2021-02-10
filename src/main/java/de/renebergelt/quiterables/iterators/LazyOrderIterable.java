@@ -51,6 +51,14 @@ public class LazyOrderIterable<T, TComparable> implements Iterable<T> {
 	
 	static final NaturalComparator defaultComparator = new NaturalComparator();
 
+	/**
+	 * Create a new lazy order iterable which wraps the given iterable
+	 * @param _wrapped The wrapped iterable
+	 * @param valueFunc Function to retrieve the value to order by
+	 * @param comparator Comparator to use for comparing values
+	 * @param sortOrder The sort order
+	 * @param <TComparable> Type of the values to compare
+	 */
 	public <TComparable> LazyOrderIterable(Iterable<T> _wrapped, ItemFunc<T, TComparable> valueFunc, Comparator comparator, SortOrder sortOrder) {
 		wrapped = _wrapped;		
 		orderFuncs = new ArrayList<OrderFunc>();
@@ -59,17 +67,19 @@ public class LazyOrderIterable<T, TComparable> implements Iterable<T> {
 	
 	/**
 	 * Creates a LazyOrderIterable which uses the default Comparator
-	 * @param _wrapped
-	 * @param valueFunc
-	 * @param sortOrder
+	 * @param _wrapped The iterable which will be wrapped (and sorted)
+	 * @param valueFunc The function to retrieve the values to compare
+	 * @param sortOrder The sort order
 	 */
 	public LazyOrderIterable(Iterable<T> _wrapped, ItemFunc<T, Comparable> valueFunc, SortOrder sortOrder) {
 		this(_wrapped, valueFunc, defaultComparator, sortOrder);
 	}		
 	
 	/**
-	 * Add a secondary ordering function which is used to compare elements
-	 * for which all previous ordering functions return "equal"	 
+	 * Adds a secondary ordering function which is used to compare elements
+	 * for which all previous ordering functions return "equal"
+	 * @param func The function to retrieve the values to compare
+	 * @param sortOrder The sort order
 	 */
 	public void addSecondaryOrderFunction(ItemFunc<T, Comparable> func, SortOrder sortOrder) {
 		orderFuncs.add(new OrderFunc(func, defaultComparator, sortOrder));
@@ -77,7 +87,11 @@ public class LazyOrderIterable<T, TComparable> implements Iterable<T> {
 	
 	/**
 	 * Add a secondary ordering function which is used to compare elements
-	 * for which all previous ordering functions return "equal"	 
+	 * for which all previous ordering functions return "equal"
+	 * @param func The function to retrieve the values to compare
+	 * @param comparator Custom comparator
+	 * @param sortOrder The sort order
+	 * @param <TComparable> Type of the values to compare
 	 */
 	public <TComparable> void addSecondaryOrderFunction(ItemFunc<T, TComparable> func, Comparator<TComparable> comparator, SortOrder sortOrder) {
 		orderFuncs.add(new OrderFunc(func, comparator, sortOrder));
@@ -138,9 +152,9 @@ class OrderFunc<T, TComparable> {
 	
 	/**
 	 * Compare the two elements with this order func
-	 * @param element1
-	 * @param element2
-	 * @return
+	 * @param element1 First element
+	 * @param element2 Second element
+	 * @return Result of comparison
 	 */
 	public int compare(T element1, T element2) {			
 		int result = comparator.compare(func.exec(element1), func.exec(element2));															

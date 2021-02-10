@@ -36,7 +36,12 @@ public class LazyConcatIterable<T> implements Iterable<T> {
 
 	Iterable<T> it1;
 	Iterable<T> it2;
-	
+
+	/**
+	 * Create an iterable which concats the two given iterables
+	 * @param _it1 First iterable
+	 * @param _it2 Second iterable
+	 */
 	public LazyConcatIterable(Iterable<T> _it1, Iterable<T> _it2) {
 		it1 = _it1;
 		it2 = _it2;

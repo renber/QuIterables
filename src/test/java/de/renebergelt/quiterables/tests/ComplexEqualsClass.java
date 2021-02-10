@@ -1,7 +1,7 @@
 package de.renebergelt.quiterables.tests;
 
 /**
- * A class which overrides equals and hashCodefor testing with
+ * A class which overrides equals and hashCode for testing with
  * the equality based methods of ListMatcher (such as distinct())
  * @author berre
  */
@@ -9,7 +9,12 @@ public class ComplexEqualsClass {
 
 	public String strValue;
 	public int intValue;
-	
+
+	/**
+	 * Create a new ComplexEqualsClass containing the given values
+	 * @param _strValue string value
+	 * @param _intValue int value
+	 */
 	public ComplexEqualsClass(String _strValue, int _intValue) {
 		strValue = _strValue;
 		intValue = _intValue;

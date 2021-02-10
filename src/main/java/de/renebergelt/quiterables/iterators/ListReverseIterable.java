@@ -38,7 +38,11 @@ import java.util.ListIterator;
 public class ListReverseIterable<T> implements Iterable<T> {
 
 	List<T> list;
-	
+
+	/**
+	 * Create a new reverse iterable which wraps the given list
+	 * @param _list The wrapped list
+	 */
 	public ListReverseIterable(List<T> _list) {
 		list = _list;		
 	}

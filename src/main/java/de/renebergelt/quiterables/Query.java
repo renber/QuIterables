@@ -39,24 +39,24 @@ import de.renebergelt.quiterables.iterators.primitivetypes.ShortArrayIterable;
 
 /**
  * Main class of the QuIterables library
- * Mimics some of C#'s generic LINQ convenience methods for Java 8 and below<br/>
- * Use anonymous methods for the predicates. <br/>
+ * Mimics some of C#'s generic LINQ convenience methods for Java 8 and below<br>
+ * Use anonymous methods for the predicates. <br>
  * Beginning with Java 8 you may use lambda expression to increase readability
  * 
  * Example to retrieve the first element of a string list which ends with ".jpg", if any:
- * <br/><br/>
+ * <br><br>
  * Recommended method for Java 8 and above: 
- * <code><pre>
+ * <code>
  * Collection{@literal <}String{@literal >} lst = ...; 
- * String r = Query.list(lst).firstOrDefault((x) -> x.endsWith(".jpg"));
+ * String r = Query.list(lst).firstOrDefault((x) -{@literal >} x.endsWith(".jpg"));
  *   if (r != null) {
  *   	// process the element
  *   } else {
  *   	System.out.println("There is no such element.");
  *   }
- *   </pre></code>
+ *   </code>
  * Java 7 and below:
- * <code><pre>
+ * <code>
  * Collection{@literal <}String{@literal >} lst = ...; 
  * String r = Query.list(lst).firstOrDefault(new Predicate{@literal <}String{@literal >}() {
  *   {@literal @}Override
@@ -68,15 +68,15 @@ import de.renebergelt.quiterables.iterators.primitivetypes.ShortArrayIterable;
  *   } else {
  *   	System.out.println("There is no such element.");
  *   }
- *   </pre></code>
+ *   </code>
  * Chaining of methods
- * <code><pre>
+ * <code>
  * Collection{@literal <}String{@literal >} lst = ...; 
- * Collection<String> resultCollection = Query.list(lst)
- * 	.where(x -> x.StartsWith(".jpg"))
- * 	.select(x -> x.substring(0, 3))
+ * Collection{@literal <}String{@literal >} resultCollection = Query.list(lst)
+ * 	.where(x -{@literal >} x.StartsWith(".jpg"))
+ * 	.select(x -{@literal >} x.substring(0, 3))
  *  .distinct();
- * </pre></code>
+ * </code>
  * @author René Bergelt
  */
 public class Query {
@@ -89,21 +89,30 @@ public class Query {
 	}
 	
 	/**
-	 * Return a queriable object for the given iterable	
+	 * Return a queriable object for the given iterable
+	 * @param lst iterable to query
+	 * @param <T> Type of elements
+	 * @return Queriable object
 	 */
 	public static <T> Queriable<T> iterable(Iterable<T> lst) {
 		return new QueriableImpl<T>(lst);
 	}
 
 	/**
-	 * Return a queriable object for the given list	
+	 * Return a queriable object for the given list
+	 * @param lst list to query
+	 * @param <T> Type of elements
+	 * @return Queriable object
 	 */
 	public static <T> Queriable<T> list(List<T> lst) {
 		return new QueriableImpl<T>(lst);
 	}
 	
 	/**
-	 * Return a queriable object for the given array	
+	 * Return a queriable object for the given array
+	 * @param array array to query
+	 * @param <T> Type of elements
+	 * @return Queriable object
 	 */
 	public static <T> Queriable<T> array(T[] array) {
 		return new QueriableImpl<T>(new ArrayIterable<T>(array));
@@ -115,6 +124,8 @@ public class Query {
 	
 	/**
 	 * Return a Queriable which wraps the given primitive-type int-array
+	 * @param array array to query
+	 * @return Queriable object
 	 */
 	public static Queriable<Integer> array(int[] array) {
 		return new QueriableImpl<Integer>(new IntArrayIterable(array));
@@ -122,6 +133,8 @@ public class Query {
 	
 	/**
 	 * Return a Queriable which wraps the given primitive-type short-array
+	 * @param array array to query
+	 * @return Queriable object
 	 */
 	public static Queriable<Short> array(short[] array) {
 		return new QueriableImpl<Short>(new ShortArrayIterable(array));
@@ -129,6 +142,8 @@ public class Query {
 
 	/**
 	 * Return a Queriable which wraps the given primitive-type long-array
+	 * @param array array to query
+	 * @return Queriable object
 	 */
 	public static Queriable<Long> array(long[] array) {
 		return new QueriableImpl<Long>(new LongArrayIterable(array));
@@ -136,6 +151,8 @@ public class Query {
 	
 	/**
 	 * Return a Queriable which wraps the given primitive-type float-array
+	 * @param array array to query
+	 * @return Queriable object
 	 */
 	public static Queriable<Float> array(float[] array) {
 		return new QueriableImpl<Float>(new FloatArrayIterable(array));
@@ -143,6 +160,8 @@ public class Query {
 	
 	/**
 	 * Return a Queriable which wraps the given primitive-type double-array
+	 * @param array array to query
+	 * @return Queriable object
 	 */
 	public static Queriable<Double> array(double[] array) {
 		return new QueriableImpl<Double>(new DoubleArrayIterable(array));
@@ -150,6 +169,8 @@ public class Query {
 	
 	/**
 	 * Return a Queriable which wraps the given primitive-type byte-array
+	 * @param array array to query
+	 * @return Queriable object
 	 */
 	public static Queriable<Byte> array(byte[] array) {
 		return new QueriableImpl<Byte>(new ByteArrayIterable(array));
@@ -157,6 +178,8 @@ public class Query {
 	
 	/**
 	 * Return a Queriable which wraps the given primitive-type boolean-array
+	 * @param array array to query
+	 * @return Queriable object
 	 */
 	public static Queriable<Boolean> array(boolean[] array) {
 		return new QueriableImpl<Boolean>(new BooleanArrayIterable(array));
@@ -164,6 +187,8 @@ public class Query {
 	
 	/**
 	 * Return a Queriable which wraps the given primitive-type char-array
+	 * @param array array to query
+	 * @return Queriable object
 	 */
 	public static Queriable<Character> array(char[] array) {
 		return new QueriableImpl<Character>(new CharArrayIterable(array));

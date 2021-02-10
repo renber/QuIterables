@@ -34,13 +34,19 @@ import de.renebergelt.quiterables.Selector;
  * Iterable of type TOut using a Selector function and flattens the result
  * enumeration
  *
- * @param <T>
+ * @param <TIn> Source type
+ * @param <TOut> Target type
  */
 public class LazySelectManyIterable<TIn, TOut> implements Iterable<TOut> {
 
 	Iterable<TIn> wrapped;
 	Selector<TIn, Iterable<TOut>> selectorFunc;
 
+	/**
+	 * Create a new lazy select many iterable which wraps the given iterable
+	 * @param _wrapped The wrapped iterable
+	 * @param  _selectorFunc Function to transform elements of the original iterable
+	 */
 	public LazySelectManyIterable(Iterable<TIn> _wrapped, Selector<TIn, Iterable<TOut>> _selectorFunc) {
 		wrapped = _wrapped;
 		selectorFunc = _selectorFunc;

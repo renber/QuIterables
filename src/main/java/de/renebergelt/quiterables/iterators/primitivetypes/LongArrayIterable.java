@@ -37,7 +37,11 @@ import de.renebergelt.quiterables.iterators.LazyIterator;
 public class LongArrayIterable implements Iterable<Long> {
 
 	long[] wrapped;
-	
+
+	/**
+	 * Create a new iterable wrapper for the given array
+	 * @param array Array to wrap
+	 */
 	public LongArrayIterable(long[] array) {
 		wrapped = array;
 	}

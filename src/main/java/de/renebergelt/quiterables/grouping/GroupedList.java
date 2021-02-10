@@ -35,6 +35,8 @@ public interface GroupedList<T> extends List<Group<T>> {
 	
 	/**
 	 * Return the group with the given group key or null if no such group exists
+	 * @param key the key to search for
+	 * @return The corresponding group
 	 */
 	public Group<T> get(GroupKey key);
 	
@@ -42,8 +44,8 @@ public interface GroupedList<T> extends List<Group<T>> {
 	 * Return the group with the group key composed of the given elements or null if no such group exists
 	 * In order to use this function with a single key element of type int, call it like get(new Integer(value))
 	 * 
-	 * @param key
-	 * @return
+	 * @param keyElements The elements of the key
+	 * @return The corresponding group
 	 */
 	public Group<T> get(Object...keyElements);	
 	
@@ -51,15 +53,17 @@ public interface GroupedList<T> extends List<Group<T>> {
 	 * GroupedList.get(int) is ambiguous. To avoid confusion use either get(new GroupKey(int)) or elementAt(int) 
 	 * To conform to the java.util.List interface this method returns the element at the given position and _not_
 	 * the group with the given integer key
-	 * If you want to get the group with a specific numerical index use get(new Integer(value))	 
+	 * If you want to get the group with a specific numerical index use get(new Integer(value))
+	 * @param index The group index
+	 * @return The corresponding group
 	 */	
 	@Override
 	public Group<T> get(int index);
 		
 	/**
 	 * Return the element at the given position in the list
-	 * @param index
-	 * @return
+	 * @param index The group index
+	 * @return The corresponding group
 	 */
 	public Group<T> elementAt(int index);	
 }

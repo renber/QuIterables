@@ -33,13 +33,19 @@ import de.renebergelt.quiterables.Selector;
  * Iterable which converts the elements of a source iterable of type TIn to
  * elements of type TOut using a Selector function 
  *
- * @param <T>
+ * @param <TIn> Source type
+ * @param <TOut> Target type
  */
 public class LazySelectIterable<TIn, TOut> implements Iterable<TOut> {
 
 	Iterable<TIn> wrapped;		
 	Selector<TIn, TOut> selectorFunc;
-	
+
+	/**
+	 * Create a new lazy select iterable which wraps the given iterable
+	 * @param _wrapped The wrapped iterable
+	 * @param  _selectorFunc Function to transform elements of the original iterable
+	 */
 	public LazySelectIterable(Iterable<TIn> _wrapped, Selector<TIn, TOut> _selectorFunc) {
 		wrapped = _wrapped;
 		selectorFunc = _selectorFunc;

@@ -32,42 +32,50 @@ package de.renebergelt.quiterables;
 public interface PrimitiveArrayTransformer<T> {
 	
 	/**
-	 * Transform to an int array	 
+	 * Transform to an int array
+	 * @return int array of elements
 	 */
 	public int[] intArray();
 	
 	/**
-	 * Transform to a short array	 
+	 * Transform to a short array
+	 * @return short array of elements
 	 */
 	public short[] shortArray();
 	
 	/**
-	 * Transform to a long array	 
+	 * Transform to a long array
+	 * @return long array of elements
 	 */
 	public long[] longArray();
 	
 	/**
-	 * Transform to a float array	 
+	 * Transform to a float array
+	 * @return float array of elements
 	 */
 	public float[] floatArray();
 	
 	/**
-	 * Transform to a double array	 
+	 * Transform to a double array
+	 * @return double array of elements
 	 */
 	public double[] doubleArray();
 	
 	/**
-	 * Transform to a byte array	 
+	 * Transform to a byte array
+	 * @return byte array of elements
 	 */
 	public byte[] byteArray();
 	
 	/**
-	 * Transform to a boolean array	 
+	 * Transform to a boolean array
+	 * @return boolean array of elements
 	 */
 	public boolean[] booleanArray();
 	
 	/**
-	 * Transform to a char array	 
+	 * Transform to a char array
+	 * @return char array of elements
 	 */
 	public char[] charArray();	
 }

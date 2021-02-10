@@ -634,7 +634,7 @@ class QueriableImpl<T> implements Queriable<T> {
 				new Predicate<T>() {
 					@Override
 					public boolean evaluate(T item) {
-						return targetType.isAssignableFrom(item.getClass());
+						return item != null && targetType.isAssignableFrom(item.getClass());
 					}}
 				
 				).cast(targetType));

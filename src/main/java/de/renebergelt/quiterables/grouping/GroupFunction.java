@@ -33,6 +33,11 @@ package de.renebergelt.quiterables.grouping;
  */
 public interface GroupFunction<T> {
 
+	/**
+	 * Return the group key for the given element
+	 * @param element Element for which the group key needs to be created
+	 * @return The group key
+	 */
 	public GroupKey getKeyFor(T element);
 
 }

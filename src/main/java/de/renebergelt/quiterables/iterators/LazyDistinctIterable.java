@@ -45,11 +45,21 @@ public class LazyDistinctIterable<T> implements Iterable<T> {
 
 	Iterable<T> wrapped;
 	Equivalence<T> equalityComparer;
-	
+
+	/**
+	 * Create a new lazy distinct iterable which wraps the given iterable
+	 * @param _wrapped The wrapped iterable
+	 */
 	public LazyDistinctIterable(Iterable<T> _wrapped) {
 		wrapped = _wrapped;
 	}
-	
+
+	/**
+	 * Create a new lazy distinct iterable which wraps the given iterable
+	 * using teh given equality comparer
+	 * @param _wrapped The wrapped iterable
+	 * @param _equalityComparer Comparer to decide if two elements are equal
+	 */
 	public LazyDistinctIterable(Iterable<T> _wrapped, Equivalence<T> _equalityComparer) {
 		wrapped = _wrapped;
 		equalityComparer = _equalityComparer;

@@ -48,7 +48,8 @@ public class EmptyIterable<T> implements Iterable<T> {
 	
 	/**
 	 * Return an instance of the EmptyIterable class
-	 * (Internally always uses the same instance)	 
+	 * (Internally always uses the same instance)
+	 * @return The default EmptyIterable
 	 */
 	public static EmptyIterable getInstance() {
 		return instance;

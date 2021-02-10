@@ -38,7 +38,9 @@ public class RangeIterable implements Iterable<Integer> {
 	int end;
 	
 	/**
-	 * Creates an instance of the RangeIterable which contains the numbers starting at start until end (inclusive, i.e. [start, end])	 
+	 * Creates an instance of the RangeIterable which contains the numbers starting at start until end (inclusive, i.e. [start, end])
+	 * @param start first number
+	 * @param end last number
 	 */
 	public RangeIterable(int start, int end) {
 		if (end < start)

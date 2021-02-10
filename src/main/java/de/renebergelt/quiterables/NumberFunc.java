@@ -32,7 +32,9 @@ package de.renebergelt.quiterables;
  */
 public interface NumberFunc<T> {
 	/**
-	 * Get a numerical value for the given item	 
+	 * Get a numerical value for the given item
+	 * @param item ELement to get a number from
+	 * @return Numerical value
 	 */
 	public Number getValue(T item);
 }

@@ -37,7 +37,11 @@ import de.renebergelt.quiterables.iterators.LazyIterator;
 public class FloatArrayIterable implements Iterable<Float> {
 
 	float[] wrapped;
-	
+
+	/**
+	 * Create a new iterable wrapper for the given array
+	 * @param array Array to wrap
+	 */
 	public FloatArrayIterable(float[] array) {
 		wrapped = array;
 	}

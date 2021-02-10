@@ -37,7 +37,11 @@ import de.renebergelt.quiterables.iterators.LazyIterator;
 public class DoubleArrayIterable implements Iterable<Double> {
 
 	double[] wrapped;
-	
+
+	/**
+	 * Create a new iterable wrapper for the given array
+	 * @param array Array to wrap
+	 */
 	public DoubleArrayIterable(double[] array) {
 		wrapped = array;
 	}

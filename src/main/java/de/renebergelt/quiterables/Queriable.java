@@ -36,30 +36,38 @@ import de.renebergelt.quiterables.grouping.SingleKeyGroupFunction;
 
 /**
  * An Iterable<T> which can be queried
- * @author berre
+ * @param <T> Type of elements
+ * @author René Bergelt
  */
 public interface Queriable<T> extends Iterable<T> {
 	    	
 	/**
-	 * Return if the enumeration is empty	 
+	 * Return if the enumeration is empty
+	 * @return True if the enumeration is empty
 	 */
 	public boolean isEmpty();
 	
 	/**
 	 * Returns this enumeration itself if it contains any elements
 	 * or if it is empty an enumeration only containing the given defaultElement
+	 * @param defaultValue The element to return if the enumeration is empty
+	 * @return this enumeration or an enumeration containing defaultValue if this is empty
 	 */
 	public Queriable<T> defaultIfEmpty(T defaultValue);
 	
 	/**
 	 * Return the element at the given position or throw NoSuchElementException
 	 * if no element at this index exits (i.e. the enumeration contains less than (index+1) elements)
+	 * @param index Element index
+	 * @return the element at the given index
 	 */
 	public T elementAt(int index) throws NoSuchElementException;
 	
 	/**
 	 * Return the element at the given position or return null
 	 * if no element at this index exits (i.e. the enumeration contains less than (index+1) elements)
+	 * @param index Element index
+	 * @return the element at the given index or null if none exists
 	 */
 	public T elementAtOrDefault(int index);
 	
@@ -85,14 +93,12 @@ public interface Queriable<T> extends Iterable<T> {
      * Return if all elements in the enumeration fulfill the given predicate
      *     
      * @param predicate The predicate to evaluate
-     * @return
      */
     public boolean all(Predicate<T> predicate);
     
     /**
      * Test if at least one element of the enumeration fulfills the condition     
      * @param predicate Condition
-     * @return 
      */
     public boolean exists(Predicate<T> predicate); 
     
@@ -133,7 +139,6 @@ public interface Queriable<T> extends Iterable<T> {
      * Return the first element in the enumeration for which the predicate is true or
      * null if no corresponding element exists     
      * @param predicate The predicate to evaluate
-     * @return 
      */
     public T firstOrDefault(Predicate<T> predicate);
     
@@ -141,7 +146,6 @@ public interface Queriable<T> extends Iterable<T> {
      * Return the first element in the enumeration for which the predicate is true or
      * the given default value if no corresponding element exists     
      * @param predicate The predicate to evaluate
-     * @return 
      */
     public T firstOrDefault(Predicate<T> predicate, T defaultValue);    
     
@@ -166,7 +170,6 @@ public interface Queriable<T> extends Iterable<T> {
      * null if no corresponding element exists  
      * This is basically the same as .where(predicate).lastOrDefault()   
      * @param predicate The predicate to evaluate
-     * @return 
      */
     public T lastOrDefault(Predicate<T> predicate);    
     
@@ -175,7 +178,6 @@ public interface Queriable<T> extends Iterable<T> {
      * the given default value if no corresponding element exists  
      * This is basically the same as .where(predicate).lastOrDefault()   
      * @param predicate The predicate to evaluate
-     * @return 
      */
     public T lastOrDefault(Predicate<T> predicate, T defaultValue);       
     
@@ -240,8 +242,7 @@ public interface Queriable<T> extends Iterable<T> {
 	
     /**
      * Return the minimum from the enumeration where the value for each item
-     * is calculated by the given function     
-     * @param list The list to retrieve the minimum from
+     * is calculated by the given function*
      * @param valFunc The function to calculate the value which shall be minimized for a single list item, the return value
      * must always be of a single type (so for one list all return values for instance have to be either integers or doubles, but mixing is not possible)
      * @return the minimum value
@@ -287,21 +288,18 @@ public interface Queriable<T> extends Iterable<T> {
      * Return all elements from the enumeration for which the predicate holds true or
      * return an empty list if no such elements exist     
      * @param predicate The predicate to evaluate
-     * @return 
      */
 	public Queriable<T> where(Predicate<T> predicate);	
 	
     /**
      * Transforms each element of the enumeration using a selector     
      * @param selector The transformation function
-     * @return
      */	
 	public <TOut> Queriable<TOut> select(Selector<T, TOut> selector);
       
     /**
      * Transform each element of the enumeration into another enumeration and combine all results to a single list          
      * @param selector The transformation function
-     * @return
      */	
 	public <T2> Queriable<T2> selectMany(Selector<T, Iterable<T2>> selector);
         
@@ -309,19 +307,21 @@ public interface Queriable<T> extends Iterable<T> {
      * Cast each element of the enumeration to the given type and return an enumeration of this type     
      * (This is an unchecked cast, so if any element in the enumeration cannot be cast to the given type
      * an exception will be thrown)
-     * @param targetType
+     * @param targetType The type to cast to
      */	
 	public <TOut> Queriable<TOut> cast(Class<TOut> targetType);
 	
 	 /**
      * Return the elements of the enumeration which are of the requested type
-     * or can be cast to it     
+     * or can be cast to it
+	 * @param targetType The type to filter
      */
 	public <TOut> Queriable<TOut> ofType(Class<TOut> targetType);
 	
 	/**
 	 * Return an enumeration which contains all elements of the current
-	 * enumeration and all elements of the enumeration given as argument	 
+	 * enumeration and all elements of the enumeration given as argument
+	 * @param toConcat Elements to concatenate
 	 */
 	public Queriable<T> concat(Iterable<T> toConcat);
 	
@@ -329,22 +329,26 @@ public interface Queriable<T> extends Iterable<T> {
 	 * Return an enumeration which contains all elements of the current
 	 * enumeration and all elements of the enumeration given as argument
 	 * without duplicates
-	 * (Equality is checked using the equals(...) method)  
+	 * (Equality is checked using the equals(...) method)
+	 * @param toUnite Elements to unite with
 	 */
-	public Queriable<T> union(Iterable<T> toConcat);	
+	public Queriable<T> union(Iterable<T> toUnite);
 	
 	/**
 	 * Return an enumeration which contains all elements of the current
 	 * enumeration and all elements of the enumeration given as argument
 	 * without duplicates	 
-	 * (Equality is checked using the given equalityComparer)  
+	 * (Equality is checked using the given equalityComparer)
+	 * @param toUnite Elements to unite with
+	 * @param equalityComparer Comparer to determine if two elements are equal
 	 */
-	public Queriable<T> union(Iterable<T> toConcat, Equivalence<T> equalityComparer);	
+	public Queriable<T> union(Iterable<T> toUnite, Equivalence<T> equalityComparer);
 	
 	/**
 	 * Returns an iterable which contains the elements of this enumeration
 	 * which also exist in the given Iterable
-	 * (Equality is checked using the equals(...) method) 
+	 * (Equality is checked using the equals(...) method)
+	 * @param intersectWith Elements to intersect with
 	 */
 	public Queriable<T> intersect(Iterable<T> intersectWith);
 	
@@ -352,13 +356,16 @@ public interface Queriable<T> extends Iterable<T> {
 	 * Returns an iterable which contains the elements of this enumeration
 	 * which also exist in the given Iterable 
 	 * (Equality is checked using the given equalityComparer)
+	 * @param intersectWith Elements to intersect with
+	 * @param equalityComparer Comparer to determine if two elements are equal
 	 */
 	public Queriable<T> intersect(Iterable<T> intersectWith, Equivalence<T> equalityComparer);
 	
 	/**
 	 * Returns an iterable which contains only the elements of this enumeration
 	 * which do not exist in the given Iterable
-	 * (Equality is checked using the equals(...) method) 
+	 * (Equality is checked using the equals(...) method)
+	 * @param elementsToSubtract Elements to exclude
 	 */
 	public Queriable<T> except(Iterable<T> elementsToSubtract);
 	
@@ -366,6 +373,8 @@ public interface Queriable<T> extends Iterable<T> {
 	 * Returns an iterable which contains only the elements of this enumeration
 	 * which do not exist in the given Iterable
 	 * (Equality is checked using the given equalityComparer)
+	 * @param elementsToSubtract Elements to exclude
+	 * @param equalityComparer Comparer to determine if two elements are equal
 	 */
 	public Queriable<T> except(Iterable<T> elementsToSubtract, Equivalence<T> equalityComparer);	
 	
@@ -377,7 +386,8 @@ public interface Queriable<T> extends Iterable<T> {
 	
 	/**
      * Returns an enumeration where each item of the enumeration appears exactly once
-     * (Equality is checked using the given equalityComparer)     
+     * (Equality is checked using the given equalityComparer)
+	 * @param equalityComparer Comparer to determine if two elements are equal
      */	
 	public Queriable<T> distinct(Equivalence<T> equalityComparer);	
 	
@@ -391,8 +401,7 @@ public interface Queriable<T> extends Iterable<T> {
 	/**
 	 * Take elements from the enumeration as long as they satisfy the condition
 	 * or until the enumeration ends
-	 * @param condition
-	 * @return
+	 * @param condition Condition to take an element
 	 */
 	public Queriable<T> takeWhile(Predicate<T> condition);	
 	
@@ -400,7 +409,7 @@ public interface Queriable<T> extends Iterable<T> {
 	 * Skip the given amount of elements in the list and
 	 * return a Queriable which starts at the (amount+1)th element or is empty if
 	 * the enumeration did not contain more than amount elements
-	 * @param amount	 
+	 * @param amount Number of elements to skip
 	 */
 	public Queriable<T> skip(int amount);
 	
@@ -414,38 +423,44 @@ public interface Queriable<T> extends Iterable<T> {
 	
 	/**
 	 * Groups the elements of the enumeration according to the given grouping function
+	 * @param func Function to group elements by
 	 */
 	public GroupedQueriable<T> group(GroupFunction<T> func);	
 	
 	 /**
 	  * Groups the elements of the enumeration according to the given grouping function
 	  * (Convenience function for grouping with only one group key element)
-     */
+	  * @param func Function to group elements by
+      */
 	public GroupedQueriable<T> groupSingle(SingleKeyGroupFunction<T> func);	
 	
 	/**
 	 * Order the elements of this enumeration according to	the values
 	 * returned by the order function
+	 * @param func Function to retrieve the value to compare from an element
 	 */
 	public OrderedQueriable<T> orderBy(ItemFunc<T, Comparable> func);
 	
 	/**
 	 * Order the elements of this enumeration according to the values
 	 * returned by the value function function using the given comparator
-	 * @param comparator	 
+	 * @param valueFunc Function to retrieve the value to compare from an element
+	 * @param comparator Comparator to compare values
 	 */
 	public <TComparable> OrderedQueriable<T> orderBy(ItemFunc<T, TComparable> valueFunc, Comparator<TComparable> comparator);
 	
 	/**
 	 * Order the elements of this enumeration according	the values
 	 * returned by the order function in descending order
+	 * @param func Function to retrieve the value to compare from an element
 	 */
 	public OrderedQueriable<T> orderByDescending(ItemFunc<T, Comparable> func);
 	
 	/**
 	 * Order the elements of this enumeration according to the values
 	 * returned by the value function function using the given comparator in descending order
-	 * @param comparator	 
+	 * @param valueFunc Function to retrieve the value to compare from an element
+	 * @param comparator Comparator to compare values
 	 */
 	public <TComparable> OrderedQueriable<T> orderByDescending(ItemFunc<T, TComparable> valueFunc, Comparator<TComparable> comparator);
 	

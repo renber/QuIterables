@@ -35,22 +35,34 @@ import java.util.Comparator;
 public interface OrderedQueriable<T> extends Queriable<T> {
 		
 	/**
-	 * Define a secondary ordering criterion	
+	 * Define a secondary ordering criterion
+	 * @param func Function to retrieve values to order by
+	 * @return Ordered queriable
 	 */
 	public OrderedQueriable<T> thenBy(ItemFunc<T, Comparable> func);
 	
 	/**
 	 * Define a secondary ordering criterion using the given Comparator
+	 * @param valueFunc Function to retrieve values to order by
+	 * @param comparator Comparator to compare values for ordering
+	 * @param <TComparable> Type of the values to compare
+	 * @return Ordered queriable
 	 */
 	public <TComparable> OrderedQueriable<T> thenBy(ItemFunc<T, TComparable> valueFunc, Comparator<TComparable> comparator);
 	
 	/**
-	 * Define a secondary ordering criterion (descending)	
+	 * Define a secondary ordering criterion (descending)
+	 * @param func Function to retrieve values to order by
+	 * @return Ordered queriable
 	 */
 	public OrderedQueriable<T> thenByDescending(ItemFunc<T, Comparable> func);
 	
 	/**
 	 * Define a secondary ordering criterion using the given Comparator (descending)
+	 * @param valueFunc Function to retrieve values to order by
+	 * @param comparator Comparator to compare values for ordering
+	 * @param <TComparable> Type of the values to compare
+	 * @return Ordered queriable
 	 */
 	public <TComparable> OrderedQueriable<T> thenByDescending(ItemFunc<T, TComparable> valueFunc, Comparator<TComparable> comparator);
 }

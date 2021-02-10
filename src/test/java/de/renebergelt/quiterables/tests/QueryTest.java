@@ -368,7 +368,7 @@ public class QueryTest {
 	@Test
 	public void test_ofType() {
 		List<Object> testList = Arrays.asList(new Object[] { new ParentTestClass(), new ParentTestClass(),
-				new ChildTestClass(), new UnrelatedTestClass() });
+				new ChildTestClass(), null, new UnrelatedTestClass() });
 
 		// ChildTestClass is derived from ParentTestClass
 		assertEquals(3, Query.list(testList).ofType(ParentTestClass.class).count());

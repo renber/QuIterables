@@ -43,6 +43,8 @@ public interface GroupedQueriable<T> extends Queriable<Group<T>> {
 
 	/**
 	 * Return the elements of the group with the given group keys
+	 * @param key Key of the group
+	 * @return Elements of the group
 	 */
 	public Queriable<T> get(GroupKey key);	
 	
@@ -56,6 +58,7 @@ public interface GroupedQueriable<T> extends Queriable<Group<T>> {
 	 * Convert	this grouped queriable to a map
 	 * where the keys are the groupkeys and the value is a iterable containing
 	 * the group's items
+	 * @return Map of keys and elements
 	 */
 	public Map<GroupKey, Iterable<T>> toMap();
 	

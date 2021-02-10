@@ -42,12 +42,7 @@ class GroupImpl<T> extends ArrayList<T> implements Group<T> {
 	public GroupImpl(GroupKey _key) {
 		key = _key;
 	}
-
-	/**
-	 * returns this list's group key
-	 * 
-	 * @return
-	 */
+	
 	@Override
 	public GroupKey getKey() {
 		return key;

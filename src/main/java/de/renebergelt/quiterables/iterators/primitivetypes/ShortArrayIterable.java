@@ -37,7 +37,11 @@ import de.renebergelt.quiterables.iterators.LazyIterator;
 public class ShortArrayIterable implements Iterable<Short> {
 
 	short[] wrapped;
-	
+
+	/**
+	 * Create a new iterable wrapper for the given array
+	 * @param array Array to wrap
+	 */
 	public ShortArrayIterable(short[] array) {
 		wrapped = array;
 	}

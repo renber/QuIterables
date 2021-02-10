@@ -33,6 +33,11 @@ package de.renebergelt.quiterables.grouping;
  */
 public interface SingleKeyGroupFunction<T> {
 
+	/**
+	 * Return a single object which acts as key for the given element
+	 * @param element The element to retrieve a key for
+	 * @return The key object
+	 */
 	public Object getKeyElementFor(T element);
 
 }

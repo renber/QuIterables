@@ -32,7 +32,10 @@ package de.renebergelt.quiterables;
 public interface Equivalence<T> {
 
 	/**
-	 * Return if the two elements are considered equal	 
+	 * Return if the two elements are considered equal
+	 * @param element1 The first element
+	 * @param element2 The second element
+	 * @return True if teh elements are considered equal
 	 */
 	public boolean areEqual(T element1, T element2);
 	

@@ -33,12 +33,12 @@ public class StringUtils {
 	}
 	
 	/**
-	 * Join the given array to a string by using the delimiter <br/>
-	 * a = {"A", "B", "C"}, delimiter = ";" <br/>
+	 * Join the given array to a string by using the delimiter <br>
+	 * a = {"A", "B", "C"}, delimiter = ";" <br>
 	 * result: "A;B;C"
-	 * @param a
-	 * @param delimiter
-	 * @return
+	 * @param a Array of strings to join
+	 * @param delimiter Teh delimiter to use for joining
+	 * @return The resulting string
 	 */
 	public static String join(String[] a, String delimiter) {
 		if (a.length == 0) 
@@ -58,12 +58,12 @@ public class StringUtils {
 	}
 	
 	/**
-	 * Join the elements in the iterable (by using their toString() method) to a string by using the delimiter <br/>
-	 * a = {"A", "B", "C"}, delimiter = ";" <br/>
+	 * Join the elements in the iterable (by using their toString() method) to a string by using the delimiter <br>
+	 * a = {"A", "B", "C"}, delimiter = ";" <br>
 	 * result: "A;B;C"
-	 * @param a
-	 * @param delimiter
-	 * @return
+	 * @param elements Elements to join
+	 * @param delimiter The delimiter to use for joining
+	 * @return The resulting string
 	 */
 	@SuppressWarnings("rawtypes")
 	public static String join(Iterable elements, String delimiter) {

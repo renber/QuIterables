@@ -41,12 +41,22 @@ public class LazySkipIterable<T> implements Iterable<T> {
 	Iterable<T> wrapped;	
 	int amount;	
 	Predicate<T> skipWhileCondition;
-	
+
+	/**
+	 * Create a new lazy skip iterable which wraps the given iterable
+	 * @param _wrapped The wrapped iterable
+	 * @param  _amount Number of elements to skip
+	 */
 	public LazySkipIterable(Iterable<T> _wrapped, int _amount) {
 		wrapped = _wrapped;
 		amount = _amount;
 	}
-	
+
+	/**
+	 * Create a new lazy skip iterable which wraps the given iterable
+	 * @param _wrapped The wrapped iterable
+	 * @param  _skipWhileCondition Condition to skip an element from the beginning
+	 */
 	public LazySkipIterable(Iterable<T> _wrapped, Predicate<T> _skipWhileCondition) {
 		wrapped = _wrapped;
 		skipWhileCondition = _skipWhileCondition;

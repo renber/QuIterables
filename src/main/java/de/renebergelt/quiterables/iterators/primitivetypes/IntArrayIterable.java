@@ -37,7 +37,11 @@ import de.renebergelt.quiterables.iterators.LazyIterator;
 public class IntArrayIterable implements Iterable<Integer> {
 
 	int[] wrapped;
-	
+
+	/**
+	 * Create a new iterable wrapper for the given array
+	 * @param array Array to wrap
+	 */
 	public IntArrayIterable(int[] array) {
 		wrapped = array;
 	}

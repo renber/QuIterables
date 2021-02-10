@@ -37,7 +37,11 @@ import de.renebergelt.quiterables.iterators.LazyIterator;
 public class ByteArrayIterable implements Iterable<Byte> {
 
 	byte[] wrapped;
-	
+
+	/**
+	 * Create a new iterable wrapper for the given array
+	 * @param array Array to wrap
+	 */
 	public ByteArrayIterable(byte[] array) {
 		wrapped = array;
 	}

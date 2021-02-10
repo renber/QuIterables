@@ -36,7 +36,8 @@ import java.util.List;
 public interface Group<T> extends List<T> {
 
 	/**
-	 * returns this group's group key	 
+	 * Returns this group's group key
+	 * @return The group key
 	 */
 	public GroupKey getKey();
 }

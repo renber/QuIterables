@@ -41,12 +41,22 @@ public class LazyTakeIterable<T> implements Iterable<T> {
 	Iterable<T> wrapped;	
 	int amount;	
 	Predicate<T> takeWhileCondition;
-	
+
+	/**
+	 * Create a new lazy take iterable which wraps the given iterable
+	 * @param _wrapped The wrapped iterable
+	 * @param  _amount Number of elements to take
+	 */
 	public LazyTakeIterable(Iterable<T> _wrapped, int _amount) {
 		wrapped = _wrapped;
 		amount = _amount;
 	}
-	
+
+	/**
+	 * Create a new lazy take iterable which wraps the given iterable
+	 * @param _wrapped The wrapped iterable
+	 * @param  _takeWhileCondition Condition to take an element from the beginning
+	 */
 	public LazyTakeIterable(Iterable<T> _wrapped, Predicate<T> _takeWhileCondition) {
 		wrapped = _wrapped;
 		takeWhileCondition = _takeWhileCondition;
