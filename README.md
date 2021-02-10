@@ -6,9 +6,9 @@ It tries to stay as close as possible to the LINQ extension lambda methods from 
 
 Beginning with Java 8 there is the stream functionality built into the system library with which there is some overlap.
 But there are also enough differences to consider QuIterable useful:
- - There are methods which are currently not available using streams (skip, take, skipWhile, takeWhile, firstOrDefault, lastorDefault, ...)
- - QuIterables' objects can be resused as many times you want, as soon as you used a stream it cannot be used again as it has been closed
- - QuIterables can be used in Java 7 and below
+ - There are methods which are currently not available using streams (skip, take, skipWhile, takeWhile, firstOrDefault, lastOrDefault, ...)
+ - QuIterables' objects can be resused as many times as you want whereas as soon as you used a stream it cannot be used again as it has been closed
+ - QuIterables can be used with Java 7 and below
  
 QuIterables tries to lazy-evaluate your expressions as much as possible, so expression evaluation can be deferred up to the point where you actually request an item or
 final result. In contrast to other Java query libraries it is fully type-safe.
