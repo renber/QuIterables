@@ -26,16 +26,8 @@
 package de.renebergelt.quiterables;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Function;
 
 import de.renebergelt.quiterables.grouping.Group;
 import de.renebergelt.quiterables.grouping.GroupFunction;
@@ -104,6 +96,15 @@ class QueriableImpl<T> implements Queriable<T> {
 		for(T element: containedIter)
 			list.add(element);		
 		return list;		
+	}
+
+	@Override
+	public <TKey, TValue> Map<TKey, TValue> toMap(Function<T, TKey> keyFunc, Function<T, TValue> valueFunc) {
+		HashMap<TKey, TValue> map = new HashMap<>();
+		for(T element: containedIter) {
+			map.put(keyFunc.apply(element), valueFunc.apply(element));
+		}
+		return map;
 	}
 	
 	@Override

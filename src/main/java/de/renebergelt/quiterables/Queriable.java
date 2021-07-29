@@ -25,10 +25,8 @@
  *******************************************************************************/
 package de.renebergelt.quiterables;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Function;
 
 import de.renebergelt.quiterables.grouping.GroupedQueriable;
 import de.renebergelt.quiterables.grouping.GroupFunction;
@@ -481,7 +479,28 @@ public interface Queriable<T> extends Iterable<T> {
 	 * Returns a set which contains the elements which are also returned by distinct() 
 	 */
 	public Set<T> toSet();
-	
+
+	/**
+	 * COnstructs a map from the elements of this Queriable
+	 * @param keyFunc The function to retrieve the map key from an element
+	 * @param valueFunc The function to retrieve the map value from an element
+	 * @param <TKey> The type of the map keys
+	 * @param <TValue> The type of the map values
+	 * @return The map
+	 */
+	public <TKey, TValue> Map<TKey, TValue> toMap(Function<T, TKey> keyFunc, Function<T, TValue> valueFunc);
+
+	/**
+	 * Constructs a map from the elements of this Queriable where each element is
+	 * assigned a key
+	 * @param keyFunc The function to retrieve the map key from an element*
+	 * @param <TKey> The type of the map keys
+	 * @return The map
+	 */
+	public default <TKey> Map<TKey, T> toMap(Function<T, TKey> keyFunc) {
+		return toMap(keyFunc, (e) -> e);
+	}
+
 	/**
 	 * Return an array which contains all elements of this enumeration
 	 * (This will evaluate the whole enumeration, if it is infinite this will block forever.)
