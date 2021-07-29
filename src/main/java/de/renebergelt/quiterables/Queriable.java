@@ -33,7 +33,7 @@ import de.renebergelt.quiterables.grouping.GroupFunction;
 import de.renebergelt.quiterables.grouping.SingleKeyGroupFunction;
 
 /**
- * An Iterable<T> which can be queried
+ * An Iterable which can be queried
  * @param <T> Type of elements
  * @author René Bergelt
  */
@@ -72,18 +72,26 @@ public interface Queriable<T> extends Iterable<T> {
 	/**
 	 * Return the element at the given position or return the given default value
 	 * if no element at this index exits (i.e. the enumeration contains less than (index+1) elements)
+	 * @param index Index of the elemt to return
+	 * @param defaultValue The value to return when no element at the given index exists
+	 * @return The element at the index or defaultValue
 	 */
 	public T elementAtOrDefault(int index, T defaultValue);	
 	
 	/**
 	 * Checks whether this enumeration and the given iterable contain the same elements and the same position and have the same length
-	 * (Equality is checked using Object.equals())	 
+	 * (Equality is checked using Object.equals())
+	 * @param iterable The iterable to compare with
+	 * @return whether this and the given Iterable are considered equal
 	 */
 	public boolean sequenceEquals(Iterable<T> iterable);
 	
 	/**
 	 * Checks whether this enumeration and the given iterable contain the same elements and the same position and have the same length
-	 * (Equality is checked using the given custom Equivalence comparer)	 
+	 * (Equality is checked using the given custom Equivalence comparer)
+	 * @param iterable The iterable to compare with
+	 * @param equalityComparer The comparison function to use
+	 * @return whether this and the given Iterable are considered equal
 	 */
 	public boolean sequenceEquals(Iterable<T> iterable, Equivalence<T> equalityComparer);
 	
@@ -91,45 +99,60 @@ public interface Queriable<T> extends Iterable<T> {
      * Return if all elements in the enumeration fulfill the given predicate
      *     
      * @param predicate The predicate to evaluate
+	 * @return whether all elements satisfy the given predicate
      */
     public boolean all(Predicate<T> predicate);
     
     /**
      * Test if at least one element of the enumeration fulfills the condition     
      * @param predicate Condition
+	 * @return whether at least one element satisfies the given predicate
      */
     public boolean exists(Predicate<T> predicate); 
     
     /**
      * Returns if this enumeration contains the given element
      * (Equality is checked using Object.equals())
+	 * @param element The element to check for
+	 * @return whether the given element is contained in this sequence
      */
     public boolean contains(T element);    
     
     /**
      * Returns if this enumeration contains the given element
      * (Equality is checked using the given Equivalence function)
+	 * @param element The element to check for
+	 * @param equalityComparer The function to decide equality
+	 * @return whether the given element is contained in this sequence
      */
     public boolean contains(T element, Equivalence<T> equalityComparer);      
     
     /**
-     * Return the first element of the enumeration or throw NoSuchElementException if the enumeration is empty             
+     * Return the first element of the enumeration or throw NoSuchElementException if the enumeration is empty
+	 * @return The first element
+	 * @throws NoSuchElementException Thrown if there is no element present
      */
     public T first() throws NoSuchElementException;
     
     /**
-     * Return the first element of the enumeration or null if the enumeration is empty             
+     * Return the first element of the enumeration or null if the enumeration is empty
+	 * @return The first element or null
      */
     public T firstOrDefault();
     
     /**
-     * Return the first element of the enumeration or the passed defaultValue if the enumeration is empty             
+     * Return the first element of the enumeration or the passed defaultValue if the enumeration is empty
+	 * @param defaultValue The deafult value to use
+	 * @return The first element or the given default value
      */
     public T firstOrDefault(T defaultValue);
     
     /**
      * Return the first element of the enumeration for which the predicate is true
-     * or throw NoSuchElementException if no corresponding element exists     
+     * or throw NoSuchElementException if no corresponding element exists
+	 * @param predicate The predicate to evaluate
+	 * @return The first element which satisfies the predicate
+	 * @throws NoSuchElementException Thrown if there is no element present which satisfies the predicate
      */
     public T first(Predicate<T> predicate) throws NoSuchElementException;
     
@@ -137,6 +160,7 @@ public interface Queriable<T> extends Iterable<T> {
      * Return the first element in the enumeration for which the predicate is true or
      * null if no corresponding element exists     
      * @param predicate The predicate to evaluate
+	 * @return The first element which satisfies the predicate or null
      */
     public T firstOrDefault(Predicate<T> predicate);
     
@@ -144,22 +168,30 @@ public interface Queriable<T> extends Iterable<T> {
      * Return the first element in the enumeration for which the predicate is true or
      * the given default value if no corresponding element exists     
      * @param predicate The predicate to evaluate
+	 * @param defaultValue The deafult value to use
+	 * @return The first element which satisfies the predicate or defaultValue
      */
     public T firstOrDefault(Predicate<T> predicate, T defaultValue);    
     
     /**
-     * Return the last element of the enumeration or throw NoSuchElementException if the enumeration is empty             
+     * Return the last element of the enumeration or throw NoSuchElementException if the enumeration is empty
+	 * @return the last element of this sequence
+	 * @throws NoSuchElementException Thrown if there is no element present which satisfies the predicate
      */
     public T last() throws NoSuchElementException;
     
     /**
-     * Return the last element of the enumeration or null if the list is empty             
+     * Return the last element of the enumeration or null if the list is empty
+	 * @return the last element of this sequence or null
      */
     public T lastOrDefault();
     
     /**
      * Return the last element of the enumeration for which the predicate is true
-     * or throw NoSuchElementException if no corresponding element exists           
+     * or throw NoSuchElementException if no corresponding element exists
+	 * @param predicate The predicate to evaluate
+	 * @return The last element which satisfies the predicate or defaultValue
+	 * @throws NoSuchElementException Thrown if there is no element present which satisfies the predicate
      */
     public T last(Predicate<T> predicate) throws NoSuchElementException;
     
@@ -168,6 +200,7 @@ public interface Queriable<T> extends Iterable<T> {
      * null if no corresponding element exists  
      * This is basically the same as .where(predicate).lastOrDefault()   
      * @param predicate The predicate to evaluate
+	 * @return The last element which satisfies the predicate or null
      */
     public T lastOrDefault(Predicate<T> predicate);    
     
@@ -176,41 +209,54 @@ public interface Queriable<T> extends Iterable<T> {
      * the given default value if no corresponding element exists  
      * This is basically the same as .where(predicate).lastOrDefault()   
      * @param predicate The predicate to evaluate
+	 * @param defaultValue The deafult value to use
+	 * @return The last element which satisfies the predicate or defaultValue
      */
     public T lastOrDefault(Predicate<T> predicate, T defaultValue);       
     
     /**
      * If the iterable contains only one element return this element.
-     * Otherwise throw NoSuchElementException (i.e. if list is empty or contains more than 1 element)     
+     * Otherwise throw NoSuchElementException (i.e. if list is empty or contains more than 1 element)
+	 * @return the only element in this sequence
+	 * @throws NoSuchElementException Thrown if there is not exactly one element present
      */
     public T single() throws NoSuchElementException;
     
     /**
      * If the iterable contains only one element which satisfies the condition return this element.
-     * Otherwise throw NoSuchElementException (i.e. if no or multiple elements satisfies the condition)     
+     * Otherwise throw NoSuchElementException (i.e. if no or multiple elements satisfies the condition)
+	 * @param predicate The predicate to evaluate
+	 * @return the only element in this sequence which fulfills the predicate
+	 * @throws NoSuchElementException Thrown if there is not exactly one element which satisfies the predicate
      */
     public T single(Predicate<T> predicate) throws NoSuchElementException;    
     
     /**
      * If the iterable contains only one element return this element.
-     * Otherwise return null (i.e. if list is empty or contains more than 1 element)     
+     * Otherwise return null (i.e. if list is empty or contains more than 1 element)
+	 * @return the only element in this sequence or null
      */
     public T singleOrDefault();
     
     /**
      * If the iterable contains only one element which satisfies the condition return this element.
-     * Otherwise return null (i.e. if no or multiple elements satisfies the condition)     
+     * Otherwise return null (i.e. if no or multiple elements satisfies the condition)
+	 * @param predicate The predicate to evaluate
+	 * @return the only element in this sequence which fulfills the predicate or null
      */
     public T singleOrDefault(Predicate<T> predicate);        
     
     /**
-     * Return the amount of elements in the enumeration if it is finite      
+     * Return the amount of elements in the enumeration if it is finite
+	 * @return Count of elements in this sequence
      */
     public int count();
     
     /**
      * Return the amount of elements in the (finite) enumeration which satisfy the given predicate  
-     * This is basically the same as .where(predicate).count()    
+     * This is basically the same as .where(predicate).count()
+	 * @param predicate The predicate to evaluate
+	 * @return Count of elements in this sequence
      */
     public int count(Predicate<T> predicate);
     
@@ -218,6 +264,7 @@ public interface Queriable<T> extends Iterable<T> {
      * Returns the maximum element of the enumeration
      * (Elements have to implement Comparable)     
      * @throws IllegalStateException if there are no elements
+	 * @return the maximum element
      */
     public T max();
     
@@ -233,7 +280,8 @@ public interface Queriable<T> extends Iterable<T> {
     
 	/**
      * Returns the minimum element of the enumeration
-     * (Elements have to implement Comparable)     
+     * (Elements have to implement Comparable)
+	 * @return the minimum element
      * @throws IllegalStateException if there are no elements
      */
 	public T min();
@@ -286,26 +334,33 @@ public interface Queriable<T> extends Iterable<T> {
      * Return all elements from the enumeration for which the predicate holds true or
      * return an empty list if no such elements exist     
      * @param predicate The predicate to evaluate
+	 * @return A queriable sequence of the elements which satisfy the given predicate
      */
 	public Queriable<T> where(Predicate<T> predicate);	
 	
     /**
      * Transforms each element of the enumeration using a selector     
      * @param selector The transformation function
+	 * @param <TOut> The target type of the selection
+	 * @return A queriable sequence of the transformed elements
      */	
 	public <TOut> Queriable<TOut> select(Selector<T, TOut> selector);
       
     /**
      * Transform each element of the enumeration into another enumeration and combine all results to a single list          
      * @param selector The transformation function
+	 * @param <TOut> The target type of the selection
+	 * @return A queriable sequence of the transformed elements
      */	
-	public <T2> Queriable<T2> selectMany(Selector<T, Iterable<T2>> selector);
+	public <TOut> Queriable<TOut> selectMany(Selector<T, Iterable<TOut>> selector);
         
     /**
      * Cast each element of the enumeration to the given type and return an enumeration of this type     
      * (This is an unchecked cast, so if any element in the enumeration cannot be cast to the given type
      * an exception will be thrown)
      * @param targetType The type to cast to
+	 * @param <TOut> The target type of the selection (equals targetType)
+	 * @return A queriable sequence of type-cast elements
      */	
 	public <TOut> Queriable<TOut> cast(Class<TOut> targetType);
 	
@@ -313,6 +368,8 @@ public interface Queriable<T> extends Iterable<T> {
      * Return the elements of the enumeration which are of the requested type
      * or can be cast to it
 	 * @param targetType The type to filter
+	 * @param <TOut> The target type of the filtering (equals targetType)
+     * @return A queriable sequence of elements of the given type
      */
 	public <TOut> Queriable<TOut> ofType(Class<TOut> targetType);
 	
@@ -320,6 +377,7 @@ public interface Queriable<T> extends Iterable<T> {
 	 * Return an enumeration which contains all elements of the current
 	 * enumeration and all elements of the enumeration given as argument
 	 * @param toConcat Elements to concatenate
+	 * @return A queriable sequence which contains the elements of this sequence and of the elements from toConcat
 	 */
 	public Queriable<T> concat(Iterable<T> toConcat);
 	
@@ -329,6 +387,7 @@ public interface Queriable<T> extends Iterable<T> {
 	 * without duplicates
 	 * (Equality is checked using the equals(...) method)
 	 * @param toUnite Elements to unite with
+	 * @return A queriable sequence which contains the union of this sequence and the given Iterable
 	 */
 	public Queriable<T> union(Iterable<T> toUnite);
 	
@@ -339,6 +398,7 @@ public interface Queriable<T> extends Iterable<T> {
 	 * (Equality is checked using the given equalityComparer)
 	 * @param toUnite Elements to unite with
 	 * @param equalityComparer Comparer to determine if two elements are equal
+	 * @return A queriable sequence which contains the union of this sequence and the given Iterable
 	 */
 	public Queriable<T> union(Iterable<T> toUnite, Equivalence<T> equalityComparer);
 	
@@ -347,6 +407,7 @@ public interface Queriable<T> extends Iterable<T> {
 	 * which also exist in the given Iterable
 	 * (Equality is checked using the equals(...) method)
 	 * @param intersectWith Elements to intersect with
+	 * @return A queriable sequence which contains the intersection of this sequence and the given Iterable
 	 */
 	public Queriable<T> intersect(Iterable<T> intersectWith);
 	
@@ -356,6 +417,7 @@ public interface Queriable<T> extends Iterable<T> {
 	 * (Equality is checked using the given equalityComparer)
 	 * @param intersectWith Elements to intersect with
 	 * @param equalityComparer Comparer to determine if two elements are equal
+	 * @return A queriable sequence which contains the union of this sequence and the given Iterable
 	 */
 	public Queriable<T> intersect(Iterable<T> intersectWith, Equivalence<T> equalityComparer);
 	
@@ -364,6 +426,7 @@ public interface Queriable<T> extends Iterable<T> {
 	 * which do not exist in the given Iterable
 	 * (Equality is checked using the equals(...) method)
 	 * @param elementsToSubtract Elements to exclude
+	 * @return A queriable sequence which contains only elements of this sequence which are not containedin the given Iterable
 	 */
 	public Queriable<T> except(Iterable<T> elementsToSubtract);
 	
@@ -373,12 +436,14 @@ public interface Queriable<T> extends Iterable<T> {
 	 * (Equality is checked using the given equalityComparer)
 	 * @param elementsToSubtract Elements to exclude
 	 * @param equalityComparer Comparer to determine if two elements are equal
+	 * @return A queriable sequence which contains only elements of this sequence which are not containedin the given Iterable
 	 */
 	public Queriable<T> except(Iterable<T> elementsToSubtract, Equivalence<T> equalityComparer);	
 	
     /**
      * Returns an enumeration where each item of the enumeration appears exactly once
-     * (Equality is checked using the equals(...) method)     
+     * (Equality is checked using the equals(...) method)
+	 * @return all elements of this sequence without duplicates
      */	
 	public Queriable<T> distinct();
 	
@@ -386,13 +451,15 @@ public interface Queriable<T> extends Iterable<T> {
      * Returns an enumeration where each item of the enumeration appears exactly once
      * (Equality is checked using the given equalityComparer)
 	 * @param equalityComparer Comparer to determine if two elements are equal
+	 * @return all elements of this sequence without duplicates
      */	
 	public Queriable<T> distinct(Equivalence<T> equalityComparer);	
 	
 	/**
 	 * Take the given amount of elements from the enumeration or
 	 * take elements until the enumeration ends
-	 * @param amount max. amount of elements to take	 
+	 * @param amount max. amount of elements to take
+	 * @return The first 'amount' of elements of this sequence (or less if fewer elements are present)
 	 */
 	public Queriable<T> take(int amount);
 	
@@ -400,6 +467,7 @@ public interface Queriable<T> extends Iterable<T> {
 	 * Take elements from the enumeration as long as they satisfy the condition
 	 * or until the enumeration ends
 	 * @param condition Condition to take an element
+	 * @return The taken elements
 	 */
 	public Queriable<T> takeWhile(Predicate<T> condition);	
 	
@@ -408,6 +476,7 @@ public interface Queriable<T> extends Iterable<T> {
 	 * return a Queriable which starts at the (amount+1)th element or is empty if
 	 * the enumeration did not contain more than amount elements
 	 * @param amount Number of elements to skip
+	 * @return The elements of this sequence after the first 'amount' elements
 	 */
 	public Queriable<T> skip(int amount);
 	
@@ -415,13 +484,15 @@ public interface Queriable<T> extends Iterable<T> {
 	 * Return a queriable which starts at the first element of the enumeration
 	 * which does not satisfy the condition, if no such element exists the returned Queriable
 	 * is empty
-	 * @param condition skip condition	 
+	 * @param condition skip condition
+	 * @return The elements after the skipped elements
 	 */
 	public Queriable<T> skipWhile(Predicate<T> condition);
 	
 	/**
 	 * Groups the elements of the enumeration according to the given grouping function
 	 * @param func Function to group elements by
+	 * @return The grouped elements
 	 */
 	public GroupedQueriable<T> group(GroupFunction<T> func);	
 	
@@ -429,6 +500,7 @@ public interface Queriable<T> extends Iterable<T> {
 	  * Groups the elements of the enumeration according to the given grouping function
 	  * (Convenience function for grouping with only one group key element)
 	  * @param func Function to group elements by
+	  * @return The grouped elements
       */
 	public GroupedQueriable<T> groupSingle(SingleKeyGroupFunction<T> func);	
 	
@@ -436,6 +508,7 @@ public interface Queriable<T> extends Iterable<T> {
 	 * Order the elements of this enumeration according to	the values
 	 * returned by the order function
 	 * @param func Function to retrieve the value to compare from an element
+	 * @return The ordered elements
 	 */
 	public OrderedQueriable<T> orderBy(ItemFunc<T, Comparable> func);
 	
@@ -444,6 +517,8 @@ public interface Queriable<T> extends Iterable<T> {
 	 * returned by the value function function using the given comparator
 	 * @param valueFunc Function to retrieve the value to compare from an element
 	 * @param comparator Comparator to compare values
+	 * @param <TComparable> The type to compare with
+	 * @return The ordered elements
 	 */
 	public <TComparable> OrderedQueriable<T> orderBy(ItemFunc<T, TComparable> valueFunc, Comparator<TComparable> comparator);
 	
@@ -451,6 +526,7 @@ public interface Queriable<T> extends Iterable<T> {
 	 * Order the elements of this enumeration according	the values
 	 * returned by the order function in descending order
 	 * @param func Function to retrieve the value to compare from an element
+	 * @return The ordered elements
 	 */
 	public OrderedQueriable<T> orderByDescending(ItemFunc<T, Comparable> func);
 	
@@ -459,24 +535,29 @@ public interface Queriable<T> extends Iterable<T> {
 	 * returned by the value function function using the given comparator in descending order
 	 * @param valueFunc Function to retrieve the value to compare from an element
 	 * @param comparator Comparator to compare values
+	 * @param <TComparable> The type to compare with
+	 * @return The ordered elements
 	 */
 	public <TComparable> OrderedQueriable<T> orderByDescending(ItemFunc<T, TComparable> valueFunc, Comparator<TComparable> comparator);
 	
 	/**
-	 * Reverse the order of elements of this enumeration	 
+	 * Reverse the order of elements of this enumeration
+	 * @return A reversed sequence
 	 */
 	public Queriable<T> reverse();
 	
 	/**
 	 * Return a list which contains all elements of this enumeration
-	 * (This will evaluate the whole enumeration, if it is infinite this will block forever.)	 	
+	 * (This will evaluate the whole enumeration, if it is infinite this will block forever.)
+	 * @return List of the elements ot this sequence
 	 */
 	public List<T> toList();
 	
 	/**
 	 * Return a list which contains all elements of this enumeration but 
 	 * no duplicates
-	 * Returns a set which contains the elements which are also returned by distinct() 
+	 * Returns a set which contains the elements which are also returned by distinct()
+	 * @return Set of the elements ot this sequence
 	 */
 	public Set<T> toSet();
 
@@ -497,19 +578,19 @@ public interface Queriable<T> extends Iterable<T> {
 	 * @param <TKey> The type of the map keys
 	 * @return The map
 	 */
-	public default <TKey> Map<TKey, T> toMap(Function<T, TKey> keyFunc) {
-		return toMap(keyFunc, (e) -> e);
-	}
+	public <TKey> Map<TKey, T> toMap(Function<T, TKey> keyFunc);
 
 	/**
 	 * Return an array which contains all elements of this enumeration
 	 * (This will evaluate the whole enumeration, if it is infinite this will block forever.)
-	 * @param classType The class type of T	 	
+	 * @param classType The class type of T
+	 * @return An array of the elements ot this sequence
 	 */
 	public T[] toArray(Class<T> classType);
 	
 	/**
-	 * Return an object which allows to transform this Iterable to a primitive-type array	 	 
+	 * Return an object which allows to transform this Iterable to a primitive-type array
+	 * @return An instance of PrimitiveArrayTransformer
 	 */
 	public PrimitiveArrayTransformer<T> toPrimitiveArray();
 }

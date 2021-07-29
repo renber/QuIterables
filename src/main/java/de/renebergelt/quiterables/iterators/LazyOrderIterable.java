@@ -36,10 +36,9 @@ import de.renebergelt.quiterables.SortOrder;
 
 /**
  * AN Iterable which sorts its elements before returning an iterator
- * 
+ * @param <T> Type of the elements in this Iterable
  * @author René Bergelt
  *
- * @param <T>
  */
 @SuppressWarnings("unchecked")
 public class LazyOrderIterable<T, TComparable> implements Iterable<T> {

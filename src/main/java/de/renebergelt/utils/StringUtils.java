@@ -27,6 +27,9 @@ package de.renebergelt.utils;
 
 import java.util.Iterator;
 
+/**
+ * Utility functions for strings
+ */
 public class StringUtils {
 
 	private StringUtils() {		
@@ -68,11 +71,10 @@ public class StringUtils {
 	@SuppressWarnings("rawtypes")
 	public static String join(Iterable elements, String delimiter) {
 		
-		Iterator it = elements.iterator();
-		
-		if (elements == null || !it.hasNext()) 
+		if (elements == null || !elements.iterator().hasNext())
 			return "";
-		
+
+		Iterator it = elements.iterator();
 		StringBuilder sb = new StringBuilder();
 		
 		for(Object element = it.next(); it.hasNext(); element = it.next()) {

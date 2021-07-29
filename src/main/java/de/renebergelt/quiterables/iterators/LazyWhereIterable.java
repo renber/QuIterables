@@ -32,9 +32,9 @@ import de.renebergelt.quiterables.Predicate;
 /**
  * Iterable which returns elements matching a predicate
  * using lazy evaluation
- * @author berre
+ * @param <T> Type of the elements in this Iterable
  *
- * @param <T>
+ * @author René Bergelt
  */
 public class LazyWhereIterable<T> implements Iterable<T> {
 

@@ -128,7 +128,7 @@ public class LazyEvaluationTest {
 	/**
 	 * Iterator which returns natural numbers and is therefore infinite
 	 * (will rollover at some point but will never stop outputting elements)	
-	 * @author berre	 
+	 * @author René Bergelt	 
 	 */
 	class NaturalNumbersIterator implements Iterator<Integer> {
 

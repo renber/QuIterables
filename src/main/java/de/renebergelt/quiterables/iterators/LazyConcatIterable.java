@@ -29,6 +29,7 @@ import java.util.Iterator;
 
 /**
  * Iterable which concatenates two other iterables
+ * @param <T> Type of the elements in this Iterable
  * @author René Bergelt
  *
  */

@@ -31,6 +31,12 @@ package de.renebergelt.quiterables;
  *
  */
 public enum SortOrder {
+	/**
+	 * Ascending sort order (smallest to largest)
+	 */
 	Ascending,
+	/**
+	 * Descending sort order (largest to smallest)
+	 */
 	Descending
 }

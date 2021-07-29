@@ -39,6 +39,7 @@ import de.renebergelt.quiterables.Query;
  * Iterable which returns the elements of a source iterable
  * but filters duplicates either by using the equals() method of
  * the objects or a custom equality comparer
+ * @param <T> Type of the elements in this Iterable
  * @author René Bergelt 
  */
 public class LazyDistinctIterable<T> implements Iterable<T> {

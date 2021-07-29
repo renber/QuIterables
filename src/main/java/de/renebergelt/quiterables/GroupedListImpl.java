@@ -35,7 +35,7 @@ import de.renebergelt.quiterables.grouping.GroupedList;
  * Actual implementation of the GroupedList interface used by the QuIterables library
  * @author René Bergelt
  *
- * @param <T>
+ * @param <T> Type of the grouped elements
  */
 class GroupedListImpl<T> extends ArrayList<Group<T>> implements GroupedList<T>  {
 		

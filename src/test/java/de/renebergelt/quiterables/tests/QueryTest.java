@@ -19,7 +19,7 @@ import de.renebergelt.quiterables.Query;
  * Unit tests for the PoorMansLinq/ListMatcher class Using Java 8 lamdba
  * expressions
  * 
- * @author berre
+ * @author René Bergelt
  */
 public class QueryTest {
 

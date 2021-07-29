@@ -31,9 +31,8 @@ import java.util.ListIterator;
 
 /**
  * Iterable which iterates a list in reverse
+ * @param <T> Type of the elements in this Iterable
  * @author René Bergelt
- *
- * @param <T>
  */
 public class ListReverseIterable<T> implements Iterable<T> {
 

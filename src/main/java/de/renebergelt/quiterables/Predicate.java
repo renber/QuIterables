@@ -27,7 +27,7 @@ package de.renebergelt.quiterables;
 
 /**
  * A predicate function needed for some Queriable methods
- * @author berre
+ * @author René Bergelt
  */
 public interface Predicate<T> {
 

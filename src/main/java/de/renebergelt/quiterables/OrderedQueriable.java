@@ -29,7 +29,7 @@ import java.util.Comparator;
 
 /**
  * Represents a Queriable which has been ordered
- * @author berre
+ * @author René Bergelt
  *
  */
 public interface OrderedQueriable<T> extends Queriable<T> {

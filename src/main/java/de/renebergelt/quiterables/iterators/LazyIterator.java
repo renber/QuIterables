@@ -31,13 +31,19 @@ import java.util.NoSuchElementException;
 /**
  * Base class for the lazy iterators
  * Derived classes only need to implement the findNextElement() function
- * 
+ * @param <T> Type of the elements in this Iterable
  * @author René Bergelt
- *
  */
 public abstract class LazyIterator<T> implements Iterator<T> {
 
+	/**
+	 * The cached next element (if any)
+	 */
 	protected T nextElement = null;
+
+	/**
+	 * Indicates if this iterator reached the end
+	 */
 	protected boolean ended = false;
 
 	@Override
@@ -83,6 +89,7 @@ public abstract class LazyIterator<T> implements Iterator<T> {
 	/**
 	 * Return the next element which satisfies the predicate
 	 * Return null to indicate that there will be no more objects
+	 * @return The next element or null
 	 */
 	protected abstract T findNextElement();
 	

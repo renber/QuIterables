@@ -30,9 +30,9 @@ import java.util.Iterator;
 /**
  * Iterable wrapper for arrays
  * Does not work with arrays of primitive types such as int, float, etc.
- * @author berre
+ * @author René Bergelt
  *
- * @param <T>
+ * @param <T> Type of the elements in this Iterable
  */
 public class ArrayIterable<T> implements Iterable<T> {
 

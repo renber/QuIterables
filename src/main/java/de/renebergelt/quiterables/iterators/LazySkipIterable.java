@@ -32,9 +32,8 @@ import de.renebergelt.quiterables.Predicate;
 /**
  * Iterable which skips a certain amount of elements or
  * skips as long as all elements match a predicate
- * @author berre
- *
- * @param <T>
+ * @param <T> Type of the elements in this Iterable
+ * @author René Bergelt
  */
 public class LazySkipIterable<T> implements Iterable<T> {
 

@@ -27,7 +27,7 @@ package de.renebergelt.quiterables;
 
 /**
  * A function which transforms one object type into another
- * @author berre
+ * @author René Bergelt
  */
 public interface Selector<TIn, TOut> {
 

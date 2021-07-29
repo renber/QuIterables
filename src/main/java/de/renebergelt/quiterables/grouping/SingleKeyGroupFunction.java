@@ -28,7 +28,7 @@ package de.renebergelt.quiterables.grouping;
 /**
  * Interface for functions which generate a GroupKey with only one component from an element
  * 
- * @author berre
+ * @author René Bergelt
  * 
  */
 public interface SingleKeyGroupFunction<T> {

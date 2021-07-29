@@ -27,7 +27,7 @@ package de.renebergelt.quiterables;
 
 /**
  * A function needed for some Queriable methods, where a complex return value per item is required
- * @author berre
+ * @author René Bergelt
  */
 public interface ItemFunc<TArg, TRet> {
 

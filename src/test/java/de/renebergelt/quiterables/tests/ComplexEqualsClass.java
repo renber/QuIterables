@@ -3,7 +3,7 @@ package de.renebergelt.quiterables.tests;
 /**
  * A class which overrides equals and hashCode for testing with
  * the equality based methods of ListMatcher (such as distinct())
- * @author berre
+ * @author René Bergelt
  */
 public class ComplexEqualsClass {
 

@@ -37,7 +37,7 @@ import de.renebergelt.quiterables.Queriable;
 /**
  * Interface which allows easy chaining of the ListMatcher methods
  * for grouped lists
- * @author berre
+ * @author René Bergelt
  */
 public interface GroupedQueriable<T> extends Queriable<Group<T>> {
 

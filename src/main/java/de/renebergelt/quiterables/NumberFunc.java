@@ -28,7 +28,7 @@ package de.renebergelt.quiterables;
 /**
  * Interface used by the methods of Queriable which 
  * require an ItemFunc with a fixed result type of Number
- * @author berre
+ * @author René Bergelt
  */
 public interface NumberFunc<T> {
 	/**

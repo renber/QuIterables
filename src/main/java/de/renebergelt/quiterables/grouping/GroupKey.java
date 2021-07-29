@@ -29,7 +29,7 @@ package de.renebergelt.quiterables.grouping;
  * Represents a group key (All group key instances with the same elements
  * (value-wise) are considered equal and have the same hashCode
  * 
- * @author berre
+ * @author René Bergelt
  * 
  */
 public class GroupKey {

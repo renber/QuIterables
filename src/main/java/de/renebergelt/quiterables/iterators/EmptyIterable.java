@@ -30,6 +30,7 @@ import java.util.NoSuchElementException;
 
 /**
  * An iterable implementation which cotnains no elements
+ * @param <T> Type of the elements in this Iterable
  * @author René Bergelt
  */
 @SuppressWarnings("rawtypes")

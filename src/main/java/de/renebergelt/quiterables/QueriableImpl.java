@@ -106,7 +106,12 @@ class QueriableImpl<T> implements Queriable<T> {
 		}
 		return map;
 	}
-	
+
+	@Override
+	public <TKey> Map<TKey, T> toMap(Function<T, TKey> keyFunc) {
+		return toMap(keyFunc, (e) -> e);
+	}
+
 	@Override
 	public Set<T> toSet() {
 		HashSet<T> set = new HashSet<T>();		

@@ -30,7 +30,7 @@ import java.util.List;
 /**
  * Represents a list with elements which all share the same group key
  * 
- * @author berre
+ * @author René Bergelt
  * 
  */
 public interface Group<T> extends List<T> {

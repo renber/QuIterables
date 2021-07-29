@@ -32,9 +32,9 @@ import de.renebergelt.quiterables.Predicate;
 /**
  * Iterable which takes a certain amount of elements or
  * takes as long as all elements match a predicate
- * @author berre
+ * @param <T> Type of the elements in this Iterable
  *
- * @param <T>
+ * @author René Bergelt
  */
 public class LazyTakeIterable<T> implements Iterable<T> {
 
