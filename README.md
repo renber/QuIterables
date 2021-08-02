@@ -16,7 +16,18 @@ final result. In contrast to other Java query libraries it is fully type-safe.
 This repository is automatically built and tested with Travis CI:<br>
 ![build status](https://api.travis-ci.org/renber/QuIterables.svg?branch=master)
 
+Available on [maven central](https://search.maven.org/artifact/de.renebergelt/quiterables/1.1.0/jar)
+
 # Usage
+
+To use QuIterables add the following to your pom.xml if you are using Maven:
+```
+<dependency>
+  <groupId>de.renebergelt</groupId>
+  <artifactId>quiterables</artifactId>
+  <version>1.1.0</version>
+</dependency>
+```
 
 All samples are using the (more readable) Java 8 lambda syntax. Below Java 8 you have to resort to implementing the required interfaces which all only have one method (e.g. anonymous implementation in-place).
 
